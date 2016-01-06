@@ -24,19 +24,21 @@ public class TopicSubscriber {
 		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(user,password,url);
 		// Connection ：JMS 客户端到JMS Provider 的连接
 		Connection connection = connectionFactory.createConnection();
+		connection.setClientID("durable-clientid-001");
 		connection.start();
 		// Session： 一个发送或接收消息的线程
 		final Session session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);
 		// Destination ：消息的目的地;消息发送给谁.
 		Topic destination=session.createTopic("example.A");
 		// 消费者，消息接收者
-		MessageConsumer consumer = session.createConsumer(destination);
+		//MessageConsumer consumer = session.createConsumer(destination);
+		MessageConsumer consumer = session.createDurableSubscriber(destination, "durable-subscirber");
 		consumer.setMessageListener(new MessageListener(){//有事务限制
 		    @Override
 		    public void onMessage(Message message) {
 		        try {
 		        	TextMessage textMessage=(TextMessage)message;
-					System.out.println(textMessage.getText());
+					System.out.println("shoudao," + textMessage.getText());
 				} catch (JMSException e1) {
 					e1.printStackTrace();
 				}
