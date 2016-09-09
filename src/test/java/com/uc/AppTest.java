@@ -1,43 +1,39 @@
 package com.uc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class AppTest {
     
-    public static String transform(String a) {
-        try {
-            a +="b";
-            Integer.parseInt(a);
-            return a;
-        } catch (Exception e) {
-            a +="c";
-            return a;
-        } finally {
-            a += "d";
-            System.out.println("=====" + a);
-        }
-    }
-    
-    public static void change(String str) {
-        str = "aaaa";
-    }
-    
-    
-    static String a= "1";
+	private static final List<String> list = new ArrayList<>();
     
     public static void main(String[] args) {
+    	
+    	System.out.println(UUID.randomUUID().toString());
     	
         int[] arr = new int[25];
         System.out.println(arr[4]);
         
-        String str = "1234";
-        change(str);
-        System.out.println(str);
+        int k =7;
+        int x = 12;
+        //x%=(k-k%5);
+        System.out.println((x%k)-(k%5));
         
-        System.out.println(transform(a));
-        a= "a";
-        System.out.println(transform(a));
-        System.out.println(a);
+        for(int i=0;i<10;i++) {
+        	list.add("a");
+        }
+        System.out.println(list.hashCode());
+        for(int i=0;i<10;i++) {
+        	list.add("a");
+        }
+        System.out.println(list.hashCode());
         
-        int x=1,y=2,z=3;
-        System.out.println(y+=z--/++x);
+        String a = "12345";
+        int sum = 0;
+        for(int i=0;i<a.length();i++) {
+        	sum = sum * 10 + (a.charAt(i) - '0');
+        	System.out.println(sum);
+        }
     }
 }
