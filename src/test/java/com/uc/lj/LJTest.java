@@ -83,6 +83,7 @@ public class LJTest {
 		headers.add("Connection", "keep-alive");
 
 		String query = "p2p3p4"; //100-150万,150-200万,200-300万
+		//String query = "p4p5"; //200-300 300-500
 		//String query = "l3l2a2a3p2p3/"; //100-200万,50-90平,2-3室
 		String path = "/Users/yangzhen/logs/fz/" + query + ".txt";
 		Path file = Paths.get(path);
@@ -90,62 +91,66 @@ public class LJTest {
 		int j = 0;
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
 			long start = System.currentTimeMillis();
-			for (int i = 1; i < 201; i++) {
+			for (int i = 1; i < 200; i++) {
 				String url = "http://hz.lianjia.com/ershoufang/pg" + i + query; //100-200万
 				HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
 				ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
-				String text = entity.getBody();
-				Document document = Jsoup.parse(text);
-				Elements elements = document.getElementsByClass("listContent").first()
-						.getElementsByClass("info");
-				for (Element element : elements) {
-					System.out.println(element);
-					String houseHref = element.getElementsByClass("title").select("a[href]").first()
-							.attr("href"); //房子详情连接
-					String houseTitle = element.getElementsByClass("title").select("a[href]").first()
-							.text(); //房子标题
-					System.out.println("houseHref,houseTitle");
-					System.out.println(houseHref + "," + houseTitle);
-					
-					String xiaoqunfo = element.getElementsByClass("houseInfo").select("a[href]")
-							.first().attr("href"); //小区详情连接
-					String houseInfo = element.getElementsByClass("houseInfo").text(); //房子详情
-					System.out.println("addressInfo,houseInfo");
-					System.out.println(xiaoqunfo + "," + houseInfo);
-					
-					System.out.println("houseFlood,communityName,communityInfo");
-					String houseFlood = element.getElementsByClass("positionInfo").text(); //所属楼层
-					String communityInfo = element.getElementsByClass("positionInfo").select("a[href]")
-							.first().attr("href"); //小区房子列表
-					String communityName = element.getElementsByClass("positionInfo").select("a[href]")
-							.first().text(); //小区名字
-					
-					String followInfo = element.getElementsByClass("followInfo").text(); //房子查看次数
-					System.out.println("houseFlood,followInfo,communityName,communityInfo");
-					System.out.println(houseFlood + "," + followInfo + "," + communityName + ","
-							+ communityInfo);
-					
-					Elements elementsTag = element.getElementsByClass("tag"); //房子推荐亮点
-					String tag = null;
-					for (Element element2 : elementsTag) {
-						tag = element2.text() + ",";
+				try {
+					String text = entity.getBody();
+					Document document = Jsoup.parse(text);
+					Elements elements = document.getElementsByClass("listContent").first()
+							.getElementsByClass("info");
+					for (Element element : elements) {
+						System.out.println(element);
+						String houseHref = element.getElementsByClass("title").select("a[href]").first()
+								.attr("href"); //房子详情连接
+						String houseTitle = element.getElementsByClass("title").select("a[href]").first()
+								.text(); //房子标题
+						System.out.println("houseHref,houseTitle");
+						System.out.println(houseHref + "," + houseTitle);
+						
+						String xiaoqunfo = element.getElementsByClass("houseInfo").select("a[href]")
+								.first().attr("href"); //小区详情连接
+						String houseInfo = element.getElementsByClass("houseInfo").text(); //房子详情
+						System.out.println("addressInfo,houseInfo");
+						System.out.println(xiaoqunfo + "," + houseInfo);
+						
+						System.out.println("houseFlood,communityName,communityInfo");
+						String houseFlood = element.getElementsByClass("positionInfo").text(); //所属楼层
+						String communityInfo = element.getElementsByClass("positionInfo").select("a[href]")
+								.first().attr("href"); //小区房子列表
+						String communityName = element.getElementsByClass("positionInfo").select("a[href]")
+								.first().text(); //小区名字
+						
+						String followInfo = element.getElementsByClass("followInfo").text(); //房子查看次数
+						System.out.println("houseFlood,followInfo,communityName,communityInfo");
+						System.out.println(houseFlood + "," + followInfo + "," + communityName + ","
+								+ communityInfo);
+						
+						Elements elementsTag = element.getElementsByClass("tag"); //房子推荐亮点
+						String tag = null;
+						for (Element element2 : elementsTag) {
+							tag = element2.text() + ",";
+						}
+						tag = tag.substring(0, tag.length() - 1);
+						String totalPrice = element.getElementsByClass("totalPrice").first().text(); //总价
+						String unitPrice = element.getElementsByClass("unitPrice").first().text()
+								.split(" ")[0]; //单价
+						System.out.println("totalPrice,unitPrice,tag");
+						System.out.println(totalPrice + "," + unitPrice + "," + tag);
+						
+						String hh = (j++) + "," + houseInfo + "," + houseFlood + "," + totalPrice + "," + unitPrice + "," + followInfo + ","
+								+ tag + "," + houseHref + "," + houseTitle + "," + communityName+"," + DateUtils.getCurrentDateStr();
+						System.out.println(hh);
+						bufferedWriter.write(hh + "\n");
 					}
-					tag = tag.substring(0, tag.length() - 1);
-					String totalPrice = element.getElementsByClass("totalPrice").first().text(); //总价
-					String unitPrice = element.getElementsByClass("unitPrice").first().text()
-							.split(" ")[0]; //单价
-					System.out.println("totalPrice,unitPrice,tag");
-					System.out.println(totalPrice + "," + unitPrice + "," + tag);
-					
-					String hh = (j++) + "," + houseInfo + "," + houseFlood + "," + totalPrice + "," + unitPrice + "," + followInfo + ","
-							 + tag + "," + houseHref + "," + houseTitle + "," + communityName+"," + DateUtils.getCurrentDateStr();
-					System.out.println(hh);
-					bufferedWriter.write(hh + "\n");
-				}
-				int thleep = ThreadLocalRandom.current().nextInt(500, 5000);
-				Thread.sleep(thleep);
-				if (elements.size() < 30) {
-					break;
+					int thleep = ThreadLocalRandom.current().nextInt(500, 5000);
+					Thread.sleep(thleep);
+					if (elements.size() < 30) {
+						break;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 			System.out.println("共计耗时：" + (System.currentTimeMillis() - start)+","+path);
