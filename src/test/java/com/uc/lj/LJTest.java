@@ -19,18 +19,25 @@ import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import com.uc.rest.UcRESTTemplate;
+import com.uc.util.BaseTestAbstact;
 import com.uc.util.DateUtils;
 
-public class LJTest {
+@Component
+public class LJTest  extends BaseTestAbstact {
 
 	private static final Logger login = LoggerFactory.getLogger("login");
 
 	private static final Logger logger = LoggerFactory.getLogger(LJTest.class);
+	
+	@Autowired
+	File2DBService service;
 
 	//@Test
 	public void test() {
@@ -82,16 +89,17 @@ public class LJTest {
 		headers.add("Referer", "http://hz.lianjia.com/ershoufang/l1l2l3a2a3a4p2p3/");
 		headers.add("Connection", "keep-alive");
 
-		String query = "p2p3p4"; //100-150万,150-200万,200-300万
+		String query = "co32p2p3p4"; //100-150万,150-200万,200-300万 按时间排序
 		//String query = "p4p5"; //200-300 300-500
 		//String query = "l3l2a2a3p2p3/"; //100-200万,50-90平,2-3室
+		
 		String path = "/Users/yangzhen/logs/fz/" + query + ".txt";
 		Path file = Paths.get(path);
 		Charset charset = Charset.forName("utf-8");
 		int j = 0;
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
 			long start = System.currentTimeMillis();
-			for (int i = 1; i < 200; i++) {
+			for (int i = 1; i < 201; i++) {
 				String url = "http://hz.lianjia.com/ershoufang/pg" + i + query; //100-200万
 				HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
 				ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
@@ -130,7 +138,7 @@ public class LJTest {
 						Elements elementsTag = element.getElementsByClass("tag"); //房子推荐亮点
 						String tag = null;
 						for (Element element2 : elementsTag) {
-							tag = element2.text() + ",";
+							tag = element2.text() + " ";
 						}
 						tag = tag.substring(0, tag.length() - 1);
 						String totalPrice = element.getElementsByClass("totalPrice").first().text(); //总价
@@ -153,9 +161,15 @@ public class LJTest {
 					e.printStackTrace();
 				}
 			}
-			System.out.println("共计耗时：" + (System.currentTimeMillis() - start)+","+path);
+			System.out.println("网页共计耗时：" + (System.currentTimeMillis() - start)+","+path);
+			long time = System.currentTimeMillis();
+			String runDate = DateUtils.getCurrentDateStr();
+			service.file2DB(runDate);
+			System.out.println("共计耗时：" + (System.currentTimeMillis() - time)+","+path);
 		} catch (IOException e) {
 			logger.error("main service error", e);
+		} catch (Exception e) {
+			logger.error("testPC service error",e);
 		}
 	}
 

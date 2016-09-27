@@ -704,4 +704,16 @@ public class DateUtils {
 		return text + "耗时" + minute + "分钟";
 
 	}
+	
+	public static Date getMonthBeforeOrAfter(Date inputDate, Integer month) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(inputDate);
+		cal.add(Calendar.MONTH, month);
+		return cal.getTime();
+	}
+	
+	public static void main(String[] args) throws Exception {
+		Date date = DateUtils.getDateStr("2016-09-18");
+		System.out.println(DateUtils.getMonthBeforeOrAfter(date, -1));
+	}
 }

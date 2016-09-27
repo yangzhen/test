@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ucredit.renren.server.dal.dao.TestDao">
+	
+	<select id="getTestInfo" resultType="TestEntry">
+		select
+			id, name, text, create_time, update_time 
+		from 
+			test 
+		where
+			id = #{id}
+	</select>
+	
+	<update id="updateTextById" >
+		update 
+			test 
+		set 
+			text = #{text} 
+		where id = #{id}
+	</update>
+	
+	<update id="updateTextUniqueByName" >
+		insert into test (name,text) values (#{name}, #{text}) on duplicate key update text=#{text}  
+	</update>
+	
+</mapper>
