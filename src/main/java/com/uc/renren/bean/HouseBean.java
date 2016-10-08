@@ -31,7 +31,7 @@ public class HouseBean {
 	private Integer year;
 
 	//总价
-	private double price;
+	private Integer price;
 
 	//单价每平方
 	private Integer unitPrice;
@@ -145,11 +145,11 @@ public class HouseBean {
 		this.year = year;
 	}
 
-	public double getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
 

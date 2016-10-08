@@ -2,6 +2,8 @@ package com.uc.renren.dao;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import com.uc.renren.bean.HouseBean;
 
@@ -27,6 +29,9 @@ public interface HouseDao {
 		+ "#{title})")
 	public int insert(HouseBean bean);
 	
-	@Delete("delete from hz_fz where crawlingDate = #{crawlingDate}")
-	public int delete(String date);
+	@Select("select id from hz_fz where href=#{href} and price=#{price}")
+	public int find(@Param("href")String href,@Param("price")int price);
+	
+	@Delete("delete from hz_fz where crawlingDate = #{crawlingDate} and site = #{site}")
+	public int delete(@Param("crawlingDate")String date,@Param("site")String site);
 }

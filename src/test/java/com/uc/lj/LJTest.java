@@ -146,9 +146,9 @@ public class LJTest  extends BaseTestAbstact {
 								.split(" ")[0]; //单价
 						System.out.println("totalPrice,unitPrice,tag");
 						System.out.println(totalPrice + "," + unitPrice + "," + tag);
-						
-						String hh = (j++) + "," + houseInfo + "," + houseFlood + "," + totalPrice + "," + unitPrice + "," + followInfo + ","
-								+ tag + "," + houseHref + "," + houseTitle + "," + communityName+"," + DateUtils.getCurrentDateStr();
+						String split = "^|";
+						String hh = (j++) + split + houseInfo + split + houseFlood + split + totalPrice + split + unitPrice + split + followInfo + split
+								+ tag + split + houseHref + split + houseTitle + split + communityName+split + DateUtils.getCurrentDateStr();
 						System.out.println(hh);
 						bufferedWriter.write(hh + "\n");
 					}
@@ -162,12 +162,17 @@ public class LJTest  extends BaseTestAbstact {
 				}
 			}
 			System.out.println("网页共计耗时：" + (System.currentTimeMillis() - start)+","+path);
+			Thread.sleep(5000);
 			long time = System.currentTimeMillis();
-			String runDate = DateUtils.getCurrentDateStr();
-			service.file2DB(runDate);
 			System.out.println("共计耗时：" + (System.currentTimeMillis() - time)+","+path);
 		} catch (IOException e) {
 			logger.error("main service error", e);
+		} catch (Exception e) {
+			logger.error("testPC service error",e);
+		}
+		String runDate = DateUtils.getCurrentDateStr();
+		try {
+			service.ljFile2DB(runDate);
 		} catch (Exception e) {
 			logger.error("testPC service error",e);
 		}
