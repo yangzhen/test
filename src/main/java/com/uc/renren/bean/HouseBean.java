@@ -33,7 +33,7 @@ public class HouseBean {
 	private Integer year;
 
 	//总价
-	private Integer price;
+	private Integer price=0;
 
 	//单价每平方
 	private Integer unitPrice;
