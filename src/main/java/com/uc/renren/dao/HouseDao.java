@@ -17,7 +17,7 @@ public interface HouseDao {
 			+ "`subCount`, `visitCount`, `pubDate`, "
 			+ "`pubDateDesc`, `href`, `xiaoqu`, "
 			+ "`crawlingDate`, `shiqu`, `tag`, "
-			+ "`title`) "
+			+ "`title`,`up`) "
 		+ "VALUES("
 		+ "	#{seq}, #{site}, #{loupan}, "
 		+ "#{jushi}, #{area}, #{direction}, "
@@ -26,11 +26,11 @@ public interface HouseDao {
 		+ "#{subCount}, #{visitCount}, #{pubDate}, "
 		+ "#{pubDateDesc}, #{href}, #{xiaoqu}, "
 		+ "#{crawlingDate}, #{shiqu}, #{tag}, "
-		+ "#{title})")
+		+ "#{title},#{up})")
 	public int insert(HouseBean bean);
 	
-	@Select("select id from hz_fz where href=#{href} and price=#{price}")
-	public int find(@Param("href")String href,@Param("price")int price);
+	@Select("select * from hz_fz where href=#{href} order by id desc limit 1")
+	public HouseBean find(@Param("href")String href);
 	
 	@Delete("delete from hz_fz where crawlingDate = #{crawlingDate} and site = #{site}")
 	public int delete(@Param("crawlingDate")String date,@Param("site")String site);

@@ -1,11 +1,13 @@
 package com.uc;
 
+import com.uc.renren.dao.HouseDao;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class AppTest {
-    
+
 	private static final List<String> list = new ArrayList<>();
     
     public static void main(String[] args) {

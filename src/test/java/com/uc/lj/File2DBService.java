@@ -33,24 +33,25 @@ public class File2DBService  extends BaseTestAbstact {
 //		for( int i=18;i<=26;i++) {
 //			String runDate = "2016-09-" + i;
 			String runDate = DateUtils.getCurrentDateStr();
-			wjFile2DB(runDate);
+			System.out.println(runDate);
+			ljFile2DB(runDate);
 		//}
 	}
 	
 	@Test
 	public void testWj() throws Exception {
-//		for( int i=18;i<=26;i++) {
-//			String runDate = "2016-09-" + i;
-			String runDate = DateUtils.getCurrentDateStr();
+		//for( int i=12;i<=13;i++) {
+			String runDate = "2016-10-" + 14;
+			//runDate = DateUtils.getCurrentDateStr();
 			wjFile2DB(runDate);
 		//}
 	}
 
 	
-	@Test
 	public void wjFile2DB(String runDate) throws Exception {
 		dao.delete(runDate, "5i5j");
-		String name = "/Users/yangzhen/logs/fz/p5u1o6n_wj.txt";
+		String name = "/Users/yangzhen/logs/fz/b100e300u1o6n_wj_"+runDate+".txt";
+		name = "/Users/yangzhen/logs/fz/b100e300u1o6n_wj.txt";
 		Path path = Paths.get(name);
 		List<String> list = Files.readAllLines(path);
 		Pattern pattern = Pattern.compile("\\^\\|");
@@ -74,20 +75,22 @@ public class File2DBService  extends BaseTestAbstact {
 			bean.setTag(arr[12]);
 			bean.setXiaoqu(arr[13]);
 			bean.setCrawlingDate(arr[14]);
-			logger.info(bean.toString());
-			int id = dao.find(bean.getHref(), bean.getPrice());
-			if(id>0) {
+			HouseBean hdb = dao.find(bean.getHref());
+			if(hdb != null && hdb.getPrice() == bean.getPrice()) {
+				logger.info(bean.toString()+",has insert,id:"+hdb.getId());
 				continue;
+			} else if (hdb != null && hdb.getPrice() != bean.getPrice()) {
+				int up = bean.getPrice()>hdb.getPrice()?1:-1;
+				bean.setUp(up);
 			}
+			logger.info(bean.toString());
 			dao.insert(bean);
 		}
 	}
 	
 	public void ljFile2DB(String runDate) throws Exception {
 		dao.delete(runDate,"lianjia");
-		String log = "/Users/yangzhen/logs/fz/p2p3p4_";
- 		String name = log + runDate + ".txt";
- 		name = "/Users/yangzhen/logs/fz/co32p2p3p4.txt";
+ 		String name = "/Users/yangzhen/logs/fz/co32p2p3p4.txt";
 		Path path = Paths.get(name);
 		List<String> list = Files.readAllLines(path);
 		Pattern pattern = Pattern.compile("\\^\\|");
@@ -151,9 +154,13 @@ public class File2DBService  extends BaseTestAbstact {
 			bean.setTitle(arr[8]);
 			bean.setXiaoqu(arr[arr.length-2]);
 			bean.setCrawlingDate(arr[arr.length-1]);
-			int id = dao.find(bean.getHref(), bean.getPrice());
-			if(id>0) {
+			HouseBean hdb = dao.find(bean.getHref());
+			if(hdb != null && hdb.getPrice() == bean.getPrice()) {
+				logger.info(bean.toString()+",has insert,id:"+hdb.getId());
 				continue;
+			} else if (hdb != null && hdb.getPrice() != bean.getPrice()) {
+				int up = bean.getPrice()>hdb.getPrice()?1:-1;
+				bean.setUp(up);
 			}
 			logger.info(bean.toString());
 			dao.insert(bean);
@@ -161,17 +168,8 @@ public class File2DBService  extends BaseTestAbstact {
 	}
 	
 	public static void main(String[] args) {
-		String a = "0^|翠苑三区 | 3室1厅 | 60平米 | 南 北 | 其他 | 无电梯^|中楼层(共7层) 1989年建板楼 - 翠苑^|170万^|单价28334元/平米^|0人关注 / 共0次带看 / 刚刚发布^|^|http://hz.lianjia.com/ershoufang/103100603484.html^|翠苑三区 3室1厅 170万^|翠苑^|2016-09-29";
-		Pattern pattern = Pattern.compile("\\^\\|");
-		String arr[] = pattern.split(a);
-		System.out.println(arr.length);
-		int seq = Integer.parseInt(arr[0]); //序号
-		HouseBean bean = new HouseBean();
-		bean.setSeq(seq);
-		String[] fangzi = StringUtils.split(arr[1], "|");
-		bean.setLoupan(fangzi[0].trim()); //楼盘名字
-		bean.setJushi(fangzi[1].trim()); //几室几厅
-		System.out.println(arr.length);
+		String runDate = DateUtils.getCurrentDateStr();
+		System.out.println(runDate);
 		
 	}
 }

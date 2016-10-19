@@ -2,6 +2,8 @@ package com.uc.renren.bean;
 
 public class HouseBean {
 
+	private Integer id;
+
 	//爬取序号
 	private Integer seq;
 
@@ -64,6 +66,24 @@ public class HouseBean {
 	private String tag;
 
 	private String title;
+
+	private Integer up = 0;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getUp() {
+		return up;
+	}
+
+	public void setUp(Integer up) {
+		this.up = up;
+	}
 
 	public String getSite() {
 		return site;

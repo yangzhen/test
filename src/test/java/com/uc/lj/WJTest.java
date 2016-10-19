@@ -46,7 +46,8 @@ public class WJTest extends BaseTestAbstact {
 		headers.add("Connection", "keep-alive");
 		
 		String www = "http://hz.5i5j.com";
-		String query = "p5u1o6n";
+		//String query = "p5u1o6n";
+		String query = "b100e300u1o6n";
 		String path = "/Users/yangzhen/logs/fz/" + query + "_wj.txt";
 		Path file = Paths.get(path);
 		Charset charset = Charset.forName("utf-8");

@@ -1,9 +1,11 @@
 package com.uc.j8;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -22,16 +24,19 @@ public class WhyJ8 {
 		score.setCourse("chinese");
 		score.setScore(8);
 		list.add(score);
+
 		UserScore score2 = new UserScore();
 		score2.setUserId(7);
 		score2.setCourse("math");
 		score2.setScore(3);
 		list.add(score2);
+
 		UserScore score3 = new UserScore();
 		score3.setUserId(7);
 		score3.setCourse("english");
 		score3.setScore(5);
 		list.add(score3);
+
 		return list;
 	}
 	
@@ -62,4 +67,15 @@ public class WhyJ8 {
 		list.forEach(t -> System.out.println(t));
 	}
 
+	@Test
+	public void testStr() {
+		List<String> ls = Arrays.asList("nn","dd","aa","1","21");
+		Collections.sort(ls, String::compareToIgnoreCase);
+	}
+
+	@Test
+	public void testScore() {
+		List ss = list.stream().filter(t -> t.getUserId()>3).sorted(Comparator.comparingInt(UserScore::getScore)).collect(Collectors.toList());
+		System.out.println(JSON.toJSONString(ss));
+	}
 }
