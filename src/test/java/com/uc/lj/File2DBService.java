@@ -42,7 +42,7 @@ public class File2DBService  extends BaseTestAbstact {
 	public void testWj() throws Exception {
 		//for( int i=12;i<=13;i++) {
 			String runDate = "2016-10-" + 14;
-			//runDate = DateUtils.getCurrentDateStr();
+			runDate = DateUtils.getCurrentDateStr();
 			wjFile2DB(runDate);
 		//}
 	}
@@ -76,11 +76,11 @@ public class File2DBService  extends BaseTestAbstact {
 			bean.setXiaoqu(arr[13]);
 			bean.setCrawlingDate(arr[14]);
 			HouseBean hdb = dao.find(bean.getHref());
-			if(hdb != null && hdb.getPrice() == bean.getPrice()) {
+			if(hdb != null && hdb.getPrice().equals(bean.getPrice())) {
 				logger.info(bean.toString()+",has insert,id:"+hdb.getId());
 				continue;
 			} else if (hdb != null && hdb.getPrice() != bean.getPrice()) {
-				int up = bean.getPrice()>hdb.getPrice()?1:-1;
+				int up = bean.getPrice().intValue()>hdb.getPrice().intValue()?1:-1;
 				bean.setUp(up);
 			}
 			logger.info(bean.toString());
@@ -155,11 +155,11 @@ public class File2DBService  extends BaseTestAbstact {
 			bean.setXiaoqu(arr[arr.length-2]);
 			bean.setCrawlingDate(arr[arr.length-1]);
 			HouseBean hdb = dao.find(bean.getHref());
-			if(hdb != null && hdb.getPrice() == bean.getPrice()) {
+			if(hdb != null && hdb.getPrice().equals(bean.getPrice())) {
 				logger.info(bean.toString()+",has insert,id:"+hdb.getId());
 				continue;
-			} else if (hdb != null && hdb.getPrice() != bean.getPrice()) {
-				int up = bean.getPrice()>hdb.getPrice()?1:-1;
+			} else if (hdb != null) {
+				int up = bean.getPrice().intValue()>hdb.getPrice().intValue()?1:-1;
 				bean.setUp(up);
 			}
 			logger.info(bean.toString());

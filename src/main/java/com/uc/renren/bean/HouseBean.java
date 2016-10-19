@@ -263,13 +263,31 @@ public class HouseBean {
 
 	@Override
 	public String toString() {
-		return "HouseBean [seq=" + seq + ", site=" + site + ", loupan=" + loupan + ", jushi="
-				+ jushi + ", area=" + area + ", direction=" + direction + ", decorate=" + decorate
-				+ ", isDianti=" + isDianti + ", buildingDesc=" + buildingDesc + ", year=" + year
-				+ ", price=" + price + ", unitPrice=" + unitPrice + ", subCount=" + subCount
-				+ ", visitCount=" + visitCount + ", pubDate=" + pubDate + ", pubDateDesc="
-				+ pubDateDesc + ", href=" + href + ", xiaoqu=" + xiaoqu + ", crawlingDate="
-				+ crawlingDate + ", shiqu=" + shiqu + ", tag=" + tag + ", title=" + title + "]";
+		return "HouseBean{" +
+				"id=" + id +
+				", seq=" + seq +
+				", site='" + site + '\'' +
+				", loupan='" + loupan + '\'' +
+				", jushi='" + jushi + '\'' +
+				", area=" + area +
+				", direction='" + direction + '\'' +
+				", decorate='" + decorate + '\'' +
+				", isDianti=" + isDianti +
+				", buildingDesc='" + buildingDesc + '\'' +
+				", year=" + year +
+				", price=" + price +
+				", unitPrice=" + unitPrice +
+				", subCount=" + subCount +
+				", visitCount=" + visitCount +
+				", pubDate='" + pubDate + '\'' +
+				", pubDateDesc='" + pubDateDesc + '\'' +
+				", href='" + href + '\'' +
+				", xiaoqu='" + xiaoqu + '\'' +
+				", crawlingDate='" + crawlingDate + '\'' +
+				", shiqu='" + shiqu + '\'' +
+				", tag='" + tag + '\'' +
+				", title='" + title + '\'' +
+				", up=" + up +
+				'}';
 	}
-
 }
