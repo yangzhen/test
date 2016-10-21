@@ -49,7 +49,7 @@ public class File2DBService  extends BaseTestAbstact {
 
 	
 	public void wjFile2DB(String runDate) throws Exception {
-		dao.delete(runDate, "5i5j");
+		//dao.delete(runDate, "5i5j");
 		String name = "/Users/yangzhen/logs/fz/b100e300u1o6n_wj_"+runDate+".txt";
 		name = "/Users/yangzhen/logs/fz/b100e300u1o6n_wj.txt";
 		Path path = Paths.get(name);
@@ -89,7 +89,7 @@ public class File2DBService  extends BaseTestAbstact {
 	}
 	
 	public void ljFile2DB(String runDate) throws Exception {
-		dao.delete(runDate,"lianjia");
+		//dao.delete(runDate,"lianjia");
  		String name = "/Users/yangzhen/logs/fz/co32p2p3p4.txt";
 		Path path = Paths.get(name);
 		List<String> list = Files.readAllLines(path);

@@ -99,12 +99,13 @@ public class LJTest  extends BaseTestAbstact {
 		int j = 0;
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
 			long start = System.currentTimeMillis();
-			for (int i = 1; i < 201; i++) {
+			for (int i = 1; i < 301; i++) {
 				String url = "http://hz.lianjia.com/ershoufang/pg" + i + query; //100-200万
 				HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
 				ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
 				try {
 					String text = entity.getBody();
+					System.out.println(text);
 					Document document = Jsoup.parse(text);
 					Elements elements = document.getElementsByClass("listContent").first()
 							.getElementsByClass("info");
@@ -114,15 +115,11 @@ public class LJTest  extends BaseTestAbstact {
 								.attr("href"); //房子详情连接
 						String houseTitle = element.getElementsByClass("title").select("a[href]").first()
 								.text(); //房子标题
-						System.out.println("houseHref,houseTitle");
-						System.out.println(houseHref + "," + houseTitle);
-						
+
 						String xiaoqunfo = element.getElementsByClass("houseInfo").select("a[href]")
 								.first().attr("href"); //小区详情连接
 						String houseInfo = element.getElementsByClass("houseInfo").text(); //房子详情
-						System.out.println("addressInfo,houseInfo");
-						System.out.println(xiaoqunfo + "," + houseInfo);
-						
+
 						System.out.println("houseFlood,communityName,communityInfo");
 						String houseFlood = element.getElementsByClass("positionInfo").text(); //所属楼层
 						String communityInfo = element.getElementsByClass("positionInfo").select("a[href]")
@@ -144,8 +141,6 @@ public class LJTest  extends BaseTestAbstact {
 						String totalPrice = element.getElementsByClass("totalPrice").first().text(); //总价
 						String unitPrice = element.getElementsByClass("unitPrice").first().text()
 								.split(" ")[0]; //单价
-						System.out.println("totalPrice,unitPrice,tag");
-						System.out.println(totalPrice + "," + unitPrice + "," + tag);
 						String split = "^|";
 						String hh = (j++) + split + houseInfo + split + houseFlood + split + totalPrice + split + unitPrice + split + followInfo + split
 								+ tag + split + houseHref + split + houseTitle + split + communityName+split + DateUtils.getCurrentDateStr();

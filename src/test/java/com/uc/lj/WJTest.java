@@ -57,7 +57,7 @@ public class WJTest extends BaseTestAbstact {
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
-			for(int j=1; j<201;j++) {
+			for(int j=1; j<301;j++) {
 				String url = "http://hz.5i5j.com/exchange/" + query+"n"+j;
 				ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
 				System.out.println(entity.getBody());
@@ -67,16 +67,12 @@ public class WJTest extends BaseTestAbstact {
 				for(int i=0;i<elements.size();i++) {
 					Element element = elements.get(i);
 					String href = element.select("a").first().attr("href");
-					String fzHref = www + href;
-					System.out.println(fzHref);
 					String title = element.select("a").first().text();
-					System.out.println(title);
 					Element element2 = element.getElementsByClass("list-info-l").first();
 					String loupan = element2.select("a").get(0).text().split("\\s")[0].trim();
 					String city = element2.select("a").get(1).text().trim();
 					String xiaoqu = element2.select("a").get(2).text().split("二手")[0].trim();
-					System.out.println(loupan + SPLIT + city + SPLIT + xiaoqu);
-					
+
 					String desc = element2.getElementsByClass("font-balck").text();
 					String a[]  = desc.split("\\s");
 					String jushi = a[0];
@@ -92,14 +88,11 @@ public class WJTest extends BaseTestAbstact {
 					}
 					System.out.println(Arrays.asList(a));
 					String tag = element2.getElementsByClass("publish").first().text();
-					System.out.println("tag:" + tag);
 					String visitCount = element2.select("li").get(2).text().split("\\s")[1];
 					
 					String price = element.getElementsByClass("list-info-r").first().select("h3").text().split("万")[0];
-					System.out.println("price:" + price);
 					String unitPrice = element.getElementsByClass("list-info-r").first().select("p").text().split("元")[0];
-					System.out.println("unitPrice:" + unitPrice);
-					String hh = (count++) + SPLIT + loupan + SPLIT + jushi + SPLIT + mianji + SPLIT + directrion + SPLIT 
+					String hh = (count++) + SPLIT + loupan + SPLIT + jushi + SPLIT + mianji + SPLIT + directrion + SPLIT
 							+  buildDesc + SPLIT + visitCount + SPLIT + price + SPLIT + unitPrice + SPLIT + city + SPLIT
 							+ title + SPLIT + fzHref + SPLIT + tag + SPLIT + xiaoqu+ SPLIT+ runDate;
 					System.out.println(hh);
