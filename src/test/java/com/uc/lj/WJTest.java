@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.uc.renren.dao.HouseDao;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,7 +32,10 @@ public class WJTest extends BaseTestAbstact {
 	
 	@Autowired
 	File2DBService service;
-	
+
+	@Autowired
+	private HouseDao dao;
+
 	@Test
 	public void test() {
 		UcRESTTemplate rest = UcRESTTemplate.getNewInstance();
@@ -62,11 +66,18 @@ public class WJTest extends BaseTestAbstact {
 				ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
 				System.out.println(entity.getBody());
 				Document document = Jsoup.parse(entity.getBody());
+				if(j==1) {
+					String number = document.select("font.font-houseNum").first().text();
+					System.out.println("totalNumber,5i5j,=========="+number);
+					dao.deleteStat(DateUtils.getCurrentDateStr(),"5i5j");
+					dao.insertStat(DateUtils.getCurrentDateStr(),"5i5j",Integer.parseInt(number));
+				}
 				Element body = document.getElementsByClass("list-body").first();
 				Elements elements = body.getElementsByClass("list-info");
 				for(int i=0;i<elements.size();i++) {
 					Element element = elements.get(i);
 					String href = element.select("a").first().attr("href");
+					String fzHref = www + href;
 					String title = element.select("a").first().text();
 					Element element2 = element.getElementsByClass("list-info-l").first();
 					String loupan = element2.select("a").get(0).text().split("\\s")[0].trim();

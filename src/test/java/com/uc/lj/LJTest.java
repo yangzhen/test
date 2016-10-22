@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.uc.renren.dao.HouseDao;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,6 +39,9 @@ public class LJTest  extends BaseTestAbstact {
 	
 	@Autowired
 	File2DBService service;
+
+	@Autowired
+	private HouseDao dao;
 
 	//@Test
 	public void test() {
@@ -99,6 +103,7 @@ public class LJTest  extends BaseTestAbstact {
 		int j = 0;
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
 			long start = System.currentTimeMillis();
+			int pageSize = 0;
 			for (int i = 1; i < 301; i++) {
 				String url = "http://hz.lianjia.com/ershoufang/pg" + i + query; //100-200万
 				HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
@@ -107,6 +112,12 @@ public class LJTest  extends BaseTestAbstact {
 					String text = entity.getBody();
 					System.out.println(text);
 					Document document = Jsoup.parse(text);
+					if(i==1) {
+						String number = document.select("h2.total.fl").first().getElementsByTag("span").text();
+						System.out.println("totalNumber,lianjia,=========="+number);
+						dao.deleteStat(DateUtils.getCurrentDateStr(),"lianjia");
+						dao.insertStat(DateUtils.getCurrentDateStr(),"lianjia",Integer.parseInt(number));
+					}
 					Elements elements = document.getElementsByClass("listContent").first()
 							.getElementsByClass("info");
 					for (Element element : elements) {

@@ -34,4 +34,10 @@ public interface HouseDao {
 	
 	@Delete("delete from hz_fz where crawlingDate = #{crawlingDate} and site = #{site}")
 	public int delete(@Param("crawlingDate")String date,@Param("site")String site);
+
+	@Delete("delete from hz_fz_dt_stat where crawlingDate = #{crawlingDate} and site = #{site} and type='fz_all' ")
+	public int deleteStat(@Param("crawlingDate")String date,@Param("site")String site);
+
+	@Insert("insert into hz_fz_dt_stat(type,crawlingDate,site,fz_count) values ('fz_all',#{crawlingDate},#{site},#{total})")
+	public int insertStat(@Param("crawlingDate")String date,@Param("site")String site,@Param("total")Integer total);
 }

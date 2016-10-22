@@ -83,7 +83,7 @@ public class File2DBService  extends BaseTestAbstact {
 				int up = bean.getPrice().intValue()>hdb.getPrice().intValue()?1:-1;
 				bean.setUp(up);
 			}
-			logger.info(bean.toString());
+			logger.info(bean.toString()+",new insert");
 			dao.insert(bean);
 		}
 	}
@@ -162,7 +162,7 @@ public class File2DBService  extends BaseTestAbstact {
 				int up = bean.getPrice().intValue()>hdb.getPrice().intValue()?1:-1;
 				bean.setUp(up);
 			}
-			logger.info(bean.toString());
+			logger.info(bean.toString()+",new insert");
 			dao.insert(bean);
 		}
 	}
