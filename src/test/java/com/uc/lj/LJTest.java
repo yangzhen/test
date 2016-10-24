@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.uc.renren.dao.HouseDao;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -32,8 +33,6 @@ import com.uc.util.DateUtils;
 
 @Component
 public class LJTest  extends BaseTestAbstact {
-
-	private static final Logger login = LoggerFactory.getLogger("login");
 
 	private static final Logger logger = LoggerFactory.getLogger(LJTest.class);
 	
@@ -100,11 +99,11 @@ public class LJTest  extends BaseTestAbstact {
 		String path = "/Users/yangzhen/logs/fz/" + query + ".txt";
 		Path file = Paths.get(path);
 		Charset charset = Charset.forName("utf-8");
-		int j = 0;
+		AtomicInteger atm = new AtomicInteger();
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
 			long start = System.currentTimeMillis();
-			int pageSize = 0;
-			for (int i = 1; i < 301; i++) {
+			int pageSize = 301;
+			for (int i = 1; i < pageSize; i++) {
 				String url = "http://hz.lianjia.com/ershoufang/pg" + i + query; //100-200万
 				HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
 				ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
@@ -114,9 +113,10 @@ public class LJTest  extends BaseTestAbstact {
 					Document document = Jsoup.parse(text);
 					if(i==1) {
 						String number = document.select("h2.total.fl").first().getElementsByTag("span").text();
-						System.out.println("totalNumber,lianjia,=========="+number);
 						dao.deleteStat(DateUtils.getCurrentDateStr(),"lianjia");
 						dao.insertStat(DateUtils.getCurrentDateStr(),"lianjia",Integer.parseInt(number));
+						pageSize = Integer.parseInt(number)*8/300;
+						System.out.println("lianjia pageSize:" + pageSize+",totalNumber:" + number);
 					}
 					Elements elements = document.getElementsByClass("listContent").first()
 							.getElementsByClass("info");
@@ -153,12 +153,12 @@ public class LJTest  extends BaseTestAbstact {
 						String unitPrice = element.getElementsByClass("unitPrice").first().text()
 								.split(" ")[0]; //单价
 						String split = "^|";
-						String hh = (j++) + split + houseInfo + split + houseFlood + split + totalPrice + split + unitPrice + split + followInfo + split
+						String hh = (atm.incrementAndGet()) + split + houseInfo + split + houseFlood + split + totalPrice + split + unitPrice + split + followInfo + split
 								+ tag + split + houseHref + split + houseTitle + split + communityName+split + DateUtils.getCurrentDateStr();
 						System.out.println(hh);
 						bufferedWriter.write(hh + "\n");
 					}
-					int thleep = ThreadLocalRandom.current().nextInt(500, 5000);
+					int thleep = ThreadLocalRandom.current().nextInt(500, 3000);
 					Thread.sleep(thleep);
 					if (elements.size() < 30) {
 						break;

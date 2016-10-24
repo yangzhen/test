@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.uc.renren.dao.HouseDao;
 import org.jsoup.Jsoup;
@@ -55,20 +56,22 @@ public class WJTest extends BaseTestAbstact {
 		String path = "/Users/yangzhen/logs/fz/" + query + "_wj.txt";
 		Path file = Paths.get(path);
 		Charset charset = Charset.forName("utf-8");
-		int count=0;
+		AtomicInteger atm = new AtomicInteger();
 		String runDate = DateUtils.getCurrentDateStr();
 		HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
-			for(int j=1; j<301;j++) {
+			int pageSize = 301;
+			for(int j=1; j<pageSize;j++) {
 				String url = "http://hz.5i5j.com/exchange/" + query+"n"+j;
 				ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
 				System.out.println(entity.getBody());
 				Document document = Jsoup.parse(entity.getBody());
 				if(j==1) {
 					String number = document.select("font.font-houseNum").first().text();
-					System.out.println("totalNumber,5i5j,=========="+number);
+					pageSize = Integer.parseInt(number)*8/300;
+					System.out.println("5i5j pageSize:" + pageSize+",totalNumber:" + number);
 					dao.deleteStat(DateUtils.getCurrentDateStr(),"5i5j");
 					dao.insertStat(DateUtils.getCurrentDateStr(),"5i5j",Integer.parseInt(number));
 				}
@@ -103,7 +106,7 @@ public class WJTest extends BaseTestAbstact {
 					
 					String price = element.getElementsByClass("list-info-r").first().select("h3").text().split("万")[0];
 					String unitPrice = element.getElementsByClass("list-info-r").first().select("p").text().split("元")[0];
-					String hh = (count++) + SPLIT + loupan + SPLIT + jushi + SPLIT + mianji + SPLIT + directrion + SPLIT
+					String hh = atm.incrementAndGet() + SPLIT + loupan + SPLIT + jushi + SPLIT + mianji + SPLIT + directrion + SPLIT
 							+  buildDesc + SPLIT + visitCount + SPLIT + price + SPLIT + unitPrice + SPLIT + city + SPLIT
 							+ title + SPLIT + fzHref + SPLIT + tag + SPLIT + xiaoqu+ SPLIT+ runDate;
 					System.out.println(hh);
@@ -112,7 +115,7 @@ public class WJTest extends BaseTestAbstact {
 						break;
 					}
 				}
-				int thleep = ThreadLocalRandom.current().nextInt(300, 5000);
+				int thleep = ThreadLocalRandom.current().nextInt(500, 3000);
 				Thread.sleep(thleep);
 			}
 		} catch (Exception e) {
