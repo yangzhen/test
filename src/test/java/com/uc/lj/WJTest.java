@@ -70,7 +70,8 @@ public class WJTest extends BaseTestAbstact {
 				Document document = Jsoup.parse(entity.getBody());
 				if(j==1) {
 					String number = document.select("font.font-houseNum").first().text();
-					pageSize = Integer.parseInt(number)*8/300;
+					//pageSize = Integer.parseInt(number)*8/300;
+					pageSize = Integer.parseInt(number)/30;
 					System.out.println("5i5j pageSize:" + pageSize+",totalNumber:" + number);
 					dao.deleteStat(DateUtils.getCurrentDateStr(),"5i5j");
 					dao.insertStat(DateUtils.getCurrentDateStr(),"5i5j",Integer.parseInt(number));
@@ -109,7 +110,7 @@ public class WJTest extends BaseTestAbstact {
 					String hh = atm.incrementAndGet() + SPLIT + loupan + SPLIT + jushi + SPLIT + mianji + SPLIT + directrion + SPLIT
 							+  buildDesc + SPLIT + visitCount + SPLIT + price + SPLIT + unitPrice + SPLIT + city + SPLIT
 							+ title + SPLIT + fzHref + SPLIT + tag + SPLIT + xiaoqu+ SPLIT+ runDate;
-					System.out.println(hh);
+					System.out.println(hh+",5i5jpaqu");
 					bufferedWriter.write(hh + "\n");
 					if(elements.size() < 30) {
 						break;

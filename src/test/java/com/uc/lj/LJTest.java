@@ -115,7 +115,8 @@ public class LJTest  extends BaseTestAbstact {
 						String number = document.select("h2.total.fl").first().getElementsByTag("span").text();
 						dao.deleteStat(DateUtils.getCurrentDateStr(),"lianjia");
 						dao.insertStat(DateUtils.getCurrentDateStr(),"lianjia",Integer.parseInt(number));
-						pageSize = Integer.parseInt(number)*8/300;
+						//pageSize = Integer.parseInt(number)*8/300;
+						pageSize = Integer.parseInt(number)/30;
 						System.out.println("lianjia pageSize:" + pageSize+",totalNumber:" + number);
 					}
 					Elements elements = document.getElementsByClass("listContent").first()
@@ -155,7 +156,7 @@ public class LJTest  extends BaseTestAbstact {
 						String split = "^|";
 						String hh = (atm.incrementAndGet()) + split + houseInfo + split + houseFlood + split + totalPrice + split + unitPrice + split + followInfo + split
 								+ tag + split + houseHref + split + houseTitle + split + communityName+split + DateUtils.getCurrentDateStr();
-						System.out.println(hh);
+						System.out.println(hh+",lianjiapaqu");
 						bufferedWriter.write(hh + "\n");
 					}
 					int thleep = ThreadLocalRandom.current().nextInt(500, 3000);
