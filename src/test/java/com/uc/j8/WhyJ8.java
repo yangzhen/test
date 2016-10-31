@@ -1,10 +1,12 @@
 package com.uc.j8;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.alibaba.druid.sql.visitor.functions.Char;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -110,10 +112,10 @@ public class WhyJ8 {
     public void testHH() {
         Map<Integer,Integer> nn = list.stream().collect(Collectors.groupingBy(p -> p.getUserId(), Collectors.summingInt(p -> p.getScore())));
         System.out.println(nn);
-        List<Integer> list = Arrays.asList(1,2,2,3,0);
-        IntSummaryStatistics aa = list.stream().collect(Collectors.summarizingInt(t->t));
+        List<Integer> idList = Arrays.asList(1,2,2,3,0);
+        IntSummaryStatistics aa = idList.stream().collect(Collectors.summarizingInt(t->t));
         System.out.println(aa);
-        Integer a  = list.stream().reduce(Integer::sum).get();
+        Integer a  = idList.stream().reduce(Integer::sum).get();
         System.out.println(a);
     }
 }

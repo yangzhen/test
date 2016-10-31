@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,6 +38,17 @@ public class WJTest extends BaseTestAbstact {
 	@Autowired
 	private HouseDao dao;
 
+
+	public void dohh(CountDownLatch latch) {
+		logger.info("5i5j start");
+		StopWatch watch = new StopWatch();
+		watch.start();
+		test();
+		latch.countDown();
+		watch.stop();
+		logger.info("5i5j end,cost:" + watch.getTotalTimeMillis());
+	}
+
 	@Test
 	public void test() {
 		UcRESTTemplate rest = UcRESTTemplate.getNewInstance();
@@ -62,62 +74,67 @@ public class WJTest extends BaseTestAbstact {
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
-			int pageSize = 301;
-			for(int j=1; j<pageSize;j++) {
+			int pageSize = 301; //5i5j存在bug,331页之后无法访问,请求error
+			for(int j=1; j<331;j++) {
 				String url = "http://hz.5i5j.com/exchange/" + query+"n"+j;
-				ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
-				System.out.println(entity.getBody());
-				Document document = Jsoup.parse(entity.getBody());
-				if(j==1) {
-					String number = document.select("font.font-houseNum").first().text();
-					//pageSize = Integer.parseInt(number)*8/300;
-					pageSize = Integer.parseInt(number)/30;
-					System.out.println("5i5j pageSize:" + pageSize+",totalNumber:" + number);
-					dao.deleteStat(DateUtils.getCurrentDateStr(),"5i5j");
-					dao.insertStat(DateUtils.getCurrentDateStr(),"5i5j",Integer.parseInt(number));
-				}
-				Element body = document.getElementsByClass("list-body").first();
-				Elements elements = body.getElementsByClass("list-info");
-				for(int i=0;i<elements.size();i++) {
-					Element element = elements.get(i);
-					String href = element.select("a").first().attr("href");
-					String fzHref = www + href;
-					String title = element.select("a").first().text();
-					Element element2 = element.getElementsByClass("list-info-l").first();
-					String loupan = element2.select("a").get(0).text().split("\\s")[0].trim();
-					String city = element2.select("a").get(1).text().trim();
-					String xiaoqu = element2.select("a").get(2).text().split("二手")[0].trim();
+				try{
+					ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
+					System.out.println(entity.getBody());
+					Document document = Jsoup.parse(entity.getBody());
+					if(j==1) {
+						String number = document.select("font.font-houseNum").first().text();
+						//pageSize = Integer.parseInt(number)*8/300;
+						pageSize = Integer.parseInt(number)/30;
+						System.out.println("5i5j,pageSize:" + pageSize+",totalNumber:" + number);
+						dao.deleteStat(DateUtils.getCurrentDateStr(),"5i5j");
+						dao.insertStat(DateUtils.getCurrentDateStr(),"5i5j",Integer.parseInt(number));
+					}
+					Element body = document.getElementsByClass("list-body").first();
+					Elements elements = body.getElementsByClass("list-info");
+					System.out.println("5i5j,url:" + url+",elements.size():" + elements.size());
+					for(int i=0;i<elements.size();i++) {
+						Element element = elements.get(i);
+						String href = element.select("a").first().attr("href");
+						String fzHref = www + href;
+						String title = element.select("a").first().text();
+						Element element2 = element.getElementsByClass("list-info-l").first();
+						String loupan = element2.select("a").get(0).text().split("\\s")[0].trim();
+						String city = element2.select("a").get(1).text().trim();
+						String xiaoqu = element2.select("a").get(2).text().split("二手")[0].trim();
 
-					String desc = element2.getElementsByClass("font-balck").text();
-					String a[]  = desc.split("\\s");
-					String jushi = a[0];
-					String mianji = a[1].split("面积")[1].split("平")[0];
-					String directrion = "";
-					String buildDesc = "";
-					if(a.length>=4) {
-						directrion = a[2].trim();
-						buildDesc = a[3].trim();
-					} else {
-						directrion = "";
-						buildDesc = a[2].trim();
+						String desc = element2.getElementsByClass("font-balck").text();
+						String a[]  = desc.split("\\s");
+						String jushi = a[0];
+						String mianji = a[1].split("面积")[1].split("平")[0];
+						String directrion = "";
+						String buildDesc = "";
+						if(a.length>=4) {
+							directrion = a[2].trim();
+							buildDesc = a[3].trim();
+						} else {
+							directrion = "";
+							buildDesc = a[2].trim();
+						}
+						System.out.println(Arrays.asList(a));
+						String tag = element2.getElementsByClass("publish").first().text();
+						String visitCount = element2.select("li").get(2).text().split("\\s")[1];
+
+						String price = element.getElementsByClass("list-info-r").first().select("h3").text().split("万")[0];
+						String unitPrice = element.getElementsByClass("list-info-r").first().select("p").text().split("元")[0];
+						String hh = atm.incrementAndGet() + SPLIT + loupan + SPLIT + jushi + SPLIT + mianji + SPLIT + directrion + SPLIT
+								+  buildDesc + SPLIT + visitCount + SPLIT + price + SPLIT + unitPrice + SPLIT + city + SPLIT
+								+ title + SPLIT + fzHref + SPLIT + tag + SPLIT + xiaoqu+ SPLIT+ runDate;
+						System.out.println(hh+",5i5jpaqu");
+						bufferedWriter.write(hh + "\n");
+						if(elements.size() < 30) {
+							break;
+						}
 					}
-					System.out.println(Arrays.asList(a));
-					String tag = element2.getElementsByClass("publish").first().text();
-					String visitCount = element2.select("li").get(2).text().split("\\s")[1];
-					
-					String price = element.getElementsByClass("list-info-r").first().select("h3").text().split("万")[0];
-					String unitPrice = element.getElementsByClass("list-info-r").first().select("p").text().split("元")[0];
-					String hh = atm.incrementAndGet() + SPLIT + loupan + SPLIT + jushi + SPLIT + mianji + SPLIT + directrion + SPLIT
-							+  buildDesc + SPLIT + visitCount + SPLIT + price + SPLIT + unitPrice + SPLIT + city + SPLIT
-							+ title + SPLIT + fzHref + SPLIT + tag + SPLIT + xiaoqu+ SPLIT+ runDate;
-					System.out.println(hh+",5i5jpaqu");
-					bufferedWriter.write(hh + "\n");
-					if(elements.size() < 30) {
-						break;
-					}
+					int thleep = ThreadLocalRandom.current().nextInt(500, 3000);
+					Thread.sleep(thleep);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				int thleep = ThreadLocalRandom.current().nextInt(500, 3000);
-				Thread.sleep(thleep);
 			}
 		} catch (Exception e) {
 			logger.error("main service error", e);

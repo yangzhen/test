@@ -9,11 +9,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.uc.renren.dao.HouseDao;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,15 +36,12 @@ import com.uc.util.DateUtils;
 @Component
 public class LJTest  extends BaseTestAbstact {
 
-	private static final Logger logger = LoggerFactory.getLogger(LJTest.class);
-	
 	@Autowired
 	File2DBService service;
 
 	@Autowired
 	private HouseDao dao;
 
-	//@Test
 	public void test() {
 
 		UcRESTTemplate rest = UcRESTTemplate.getNewInstance();
@@ -79,6 +78,19 @@ public class LJTest  extends BaseTestAbstact {
 		//		System.out.println(entity.getBody());
 	}
 
+	public void dohh(CountDownLatch latch) {
+		StopWatch watch = new StopWatch();
+		watch.start();
+		try {
+			logger.info("lianjia start");
+			testPC();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		latch.countDown();
+		watch.stop();
+		logger.info("lianjia end,cost:" + watch.getNanoTime()/1000);
+	}
 	@Test
 	public void testPC() throws InterruptedException {
 		UcRESTTemplate rest = UcRESTTemplate.getNewInstance();
@@ -100,14 +112,14 @@ public class LJTest  extends BaseTestAbstact {
 		Path file = Paths.get(path);
 		Charset charset = Charset.forName("utf-8");
 		AtomicInteger atm = new AtomicInteger();
+		HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
 			long start = System.currentTimeMillis();
 			int pageSize = 301;
 			for (int i = 1; i < pageSize; i++) {
 				String url = "http://hz.lianjia.com/ershoufang/pg" + i + query; //100-200万
-				HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
-				ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
 				try {
+					ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
 					String text = entity.getBody();
 					System.out.println(text);
 					Document document = Jsoup.parse(text);
@@ -121,6 +133,7 @@ public class LJTest  extends BaseTestAbstact {
 					}
 					Elements elements = document.getElementsByClass("listContent").first()
 							.getElementsByClass("info");
+					System.out.println("lianjia,url:" + url+",elements.size():" + elements.size());
 					for (Element element : elements) {
 						System.out.println(element);
 						String houseHref = element.getElementsByClass("title").select("a[href]").first()
@@ -197,7 +210,7 @@ public class LJTest  extends BaseTestAbstact {
 			bufferedWriter.write("aa" + "\n");
 			bufferedWriter.write("bb" + "\n");
 		} catch (IOException e) {
-			logger.error("main service error", e);
+			e.printStackTrace();
 		}
 	}
 

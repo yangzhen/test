@@ -125,6 +125,12 @@ public class StreamTest {
         System.out.println(list);
          Map<String,List<UserScore>> map = list.stream().collect(Collectors.groupingBy(UserScore::getCourse));
         System.out.println(map);
+
+        Map<Integer,String> aa = new HashMap<>();
+        aa.put(1,"aa");
+        aa.put(128,"dd");
+        aa.put(333,"23");
+        System.out.println(aa.get(333));
     }
 
     private class  UserBuilder implements Supplier<UserScore> {

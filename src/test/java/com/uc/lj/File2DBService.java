@@ -56,7 +56,6 @@ public class File2DBService  extends BaseTestAbstact {
 		List<String> list = Files.readAllLines(path);
 		Pattern pattern = Pattern.compile("\\^\\|");
 		for(String str : list) {
-			logger.info(str);
 			HouseBean bean = new HouseBean();
 			String arr[] = pattern.split(str);
 			bean.setSite("5i5j");
@@ -96,7 +95,6 @@ public class File2DBService  extends BaseTestAbstact {
 		Pattern pattern = Pattern.compile("\\^\\|");
 		Pattern pattern2 = Pattern.compile("[0-9]{4}");
 		for (String str : list) {
-			logger.info(str);
 			HouseBean bean = new HouseBean();
 			bean.setSite("lianjia");
 			//String arr[] = str.split("$");
