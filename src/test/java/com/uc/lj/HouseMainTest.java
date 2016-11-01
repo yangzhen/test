@@ -25,8 +25,20 @@ public class HouseMainTest extends BaseTestAbstact {
     public void testAll() {
         CountDownLatch latch = new CountDownLatch(2);
         try {
-            lj.dohh(latch);
-            wj.dohh(latch);
+            new Thread(){
+                @Override
+                public void run() {
+                    lj.dohh(latch);
+                }
+            }.start();
+
+            new Thread(){
+                @Override
+                public void run() {
+                    wj.dohh(latch);
+                }
+            }.start();
+
             latch.await();
             logger.info("all job end,time:" + DateUtils.getCurrentDateTimeStr());
         } catch (InterruptedException e) {

@@ -75,7 +75,7 @@ public class WJTest extends BaseTestAbstact {
 		stopWatch.start();
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
 			int pageSize = 301; //5i5j存在bug,331页之后无法访问,请求error
-			for(int j=1; j<331;j++) {
+			for(int j=1; j<=331;j++) {
 				String url = "http://hz.5i5j.com/exchange/" + query+"n"+j;
 				try{
 					ResponseEntity<String> entity = rest.getEntity(url, httpEntity);

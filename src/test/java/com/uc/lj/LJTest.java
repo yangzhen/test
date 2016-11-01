@@ -116,7 +116,7 @@ public class LJTest  extends BaseTestAbstact {
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
 			long start = System.currentTimeMillis();
 			int pageSize = 301;
-			for (int i = 1; i < pageSize; i++) {
+			for (int i = 1; i <= pageSize; i++) {
 				String url = "http://hz.lianjia.com/ershoufang/pg" + i + query; //100-200万
 				try {
 					ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
