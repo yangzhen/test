@@ -21,9 +21,13 @@ public class HouseMainTest extends BaseTestAbstact {
     @Autowired
     private WJTest wj;
 
+    @Autowired
+    private HshbTest hshb;
+
     @Test
+
     public void testAll() {
-        CountDownLatch latch = new CountDownLatch(2);
+        CountDownLatch latch = new CountDownLatch(3);
         try {
             new Thread(){
                 @Override
@@ -39,6 +43,12 @@ public class HouseMainTest extends BaseTestAbstact {
                 }
             }.start();
 
+            new Thread() {
+                @Override
+                public  void run() {
+                    hshb.dohh(latch);
+                }
+            }.start();
             latch.await();
             logger.info("all job end,time:" + DateUtils.getCurrentDateTimeStr());
         } catch (InterruptedException e) {

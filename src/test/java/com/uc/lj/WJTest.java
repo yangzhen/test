@@ -79,7 +79,7 @@ public class WJTest extends BaseTestAbstact {
 				String url = "http://hz.5i5j.com/exchange/" + query+"n"+j;
 				try{
 					ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
-					System.out.println(entity.getBody());
+					//System.out.println("5i5j url:"+url+",content:" + entity.getBody());
 					Document document = Jsoup.parse(entity.getBody());
 					if(j==1) {
 						String number = document.select("font.font-houseNum").first().text();
@@ -126,11 +126,8 @@ public class WJTest extends BaseTestAbstact {
 								+ title + SPLIT + fzHref + SPLIT + tag + SPLIT + xiaoqu+ SPLIT+ runDate;
 						System.out.println(hh+",5i5jpaqu");
 						bufferedWriter.write(hh + "\n");
-						if(elements.size() < 30) {
-							break;
-						}
 					}
-					int thleep = ThreadLocalRandom.current().nextInt(500, 3000);
+					int thleep = ThreadLocalRandom.current().nextInt(200, 1500);
 					Thread.sleep(thleep);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -141,7 +138,7 @@ public class WJTest extends BaseTestAbstact {
 		}
 		stopWatch.stop();
 		long cost = stopWatch.getTotalTimeMillis();
-		System.out.println("网页共计耗时：" + cost+","+path);
+		System.out.println("5i5j网页共计耗时：" + cost+","+path);
 		try {
 			service.wjFile2DB(runDate);
 		} catch (Exception e) {

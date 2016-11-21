@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.uc.renren.dao.HouseDao;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.time.StopWatch;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,6 +31,7 @@ import org.springframework.stereotype.Component;
 import com.uc.rest.UcRESTTemplate;
 import com.uc.util.BaseTestAbstact;
 import com.uc.util.DateUtils;
+import org.springframework.util.StopWatch;
 
 @Component
 public class LJTest  extends BaseTestAbstact {
@@ -89,7 +89,7 @@ public class LJTest  extends BaseTestAbstact {
 		}
 		latch.countDown();
 		watch.stop();
-		logger.info("lianjia end,cost:" + watch.getNanoTime()/1000);
+		logger.info("lianjia end,cost:" + watch.getTotalTimeMillis());
 	}
 	@Test
 	public void testPC() throws InterruptedException {
@@ -121,7 +121,7 @@ public class LJTest  extends BaseTestAbstact {
 				try {
 					ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
 					String text = entity.getBody();
-					System.out.println(text);
+					//System.out.println("lianjia url:" + url+",content:" + text);
 					Document document = Jsoup.parse(text);
 					if(i==1) {
 						String number = document.select("h2.total.fl").first().getElementsByTag("span").text();
@@ -131,8 +131,8 @@ public class LJTest  extends BaseTestAbstact {
 						pageSize = Integer.parseInt(number)/30;
 						System.out.println("lianjia pageSize:" + pageSize+",totalNumber:" + number);
 					}
-					Elements elements = document.getElementsByClass("listContent").first()
-							.getElementsByClass("info");
+					Elements elements = document.getElementsByClass("sellListContent").first()
+							.select("div.info.clear");
 					System.out.println("lianjia,url:" + url+",elements.size():" + elements.size());
 					for (Element element : elements) {
 						System.out.println(element);
@@ -172,7 +172,7 @@ public class LJTest  extends BaseTestAbstact {
 						System.out.println(hh+",lianjiapaqu");
 						bufferedWriter.write(hh + "\n");
 					}
-					int thleep = ThreadLocalRandom.current().nextInt(500, 3000);
+					int thleep = ThreadLocalRandom.current().nextInt(200, 1500);
 					Thread.sleep(thleep);
 					if (elements.size() < 30) {
 						break;
@@ -181,10 +181,7 @@ public class LJTest  extends BaseTestAbstact {
 					e.printStackTrace();
 				}
 			}
-			System.out.println("网页共计耗时：" + (System.currentTimeMillis() - start)+","+path);
-			Thread.sleep(5000);
-			long time = System.currentTimeMillis();
-			System.out.println("共计耗时：" + (System.currentTimeMillis() - time)+","+path);
+			System.out.println("lianjia网页共计耗时：" + (System.currentTimeMillis() - start)+","+path);
 		} catch (IOException e) {
 			logger.error("main service error", e);
 		} catch (Exception e) {
