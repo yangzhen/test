@@ -5,7 +5,7 @@
 	<groupId>com.uc</groupId>
 	<artifactId>test</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>test</name>
 	<url>http://maven.apache.org</url>
@@ -18,7 +18,7 @@
 		<jdk.version>1.8</jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<jetty.version>9.2.17.v20160517</jetty.version>
+		<jetty.version>9.3.6.v20151106</jetty.version>
 	</properties>
 
 	<dependencies>
@@ -205,16 +205,48 @@
 			<version>1.8.3</version>
 		</dependency>
 
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<encoding>utf8</encoding>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<target>${jdk.version}</target>
 					<source>${jdk.version}</source>
 					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- 本地开发环境通过mvn jetty:run 启动 start port:8090 -->
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<stopKey>stop</stopKey>
+					<stopPort>8044</stopPort>
+					<scanIntervalSeconds>1</scanIntervalSeconds>
+					<webApp>
+						<contextPath>/</contextPath>
+					</webApp>
+					<httpConnector>
+						<port>8888</port>
+					</httpConnector>
 				</configuration>
 			</plugin>
 		</plugins>

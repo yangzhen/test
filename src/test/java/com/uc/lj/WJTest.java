@@ -81,14 +81,14 @@ public class WJTest extends BaseTestAbstact {
 					ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
 					//System.out.println("5i5j url:"+url+",content:" + entity.getBody());
 					Document document = Jsoup.parse(entity.getBody());
-					if(j==1) {
-						String number = document.select("font.font-houseNum").first().text();
-						//pageSize = Integer.parseInt(number)*8/300;
-						pageSize = Integer.parseInt(number)/30;
-						System.out.println("5i5j,pageSize:" + pageSize+",totalNumber:" + number);
-						dao.deleteStat(DateUtils.getCurrentDateStr(),"5i5j");
-						dao.insertStat(DateUtils.getCurrentDateStr(),"5i5j",Integer.parseInt(number));
-					}
+//					if(j==1) {
+//						String number = document.select("font.font-houseNum").first().text();
+//						//pageSize = Integer.parseInt(number)*8/300;
+//						pageSize = Integer.parseInt(number)/30;
+//						System.out.println("5i5j,pageSize:" + pageSize+",totalNumber:" + number);
+//						dao.deleteStat(DateUtils.getCurrentDateStr(),"5i5j");
+//						dao.insertStat(DateUtils.getCurrentDateStr(),"5i5j",Integer.parseInt(number));
+//					}
 					Element body = document.getElementsByClass("list-body").first();
 					Elements elements = body.getElementsByClass("list-info");
 					System.out.println("5i5j,url:" + url+",elements.size():" + elements.size());

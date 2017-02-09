@@ -115,7 +115,7 @@ public class LJTest  extends BaseTestAbstact {
 		HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
 			long start = System.currentTimeMillis();
-			int pageSize = 301;
+			int pageSize = 100;
 			for (int i = 1; i <= pageSize; i++) {
 				String url = "http://hz.lianjia.com/ershoufang/pg" + i + query; //100-200万
 				try {
@@ -128,7 +128,7 @@ public class LJTest  extends BaseTestAbstact {
 						dao.deleteStat(DateUtils.getCurrentDateStr(),"lianjia");
 						dao.insertStat(DateUtils.getCurrentDateStr(),"lianjia",Integer.parseInt(number));
 						//pageSize = Integer.parseInt(number)*8/300;
-						pageSize = Integer.parseInt(number)/30;
+						//pageSize = Integer.parseInt(number)/30;
 						System.out.println("lianjia pageSize:" + pageSize+",totalNumber:" + number);
 					}
 					Elements elements = document.getElementsByClass("sellListContent").first()

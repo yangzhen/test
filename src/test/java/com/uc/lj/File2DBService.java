@@ -155,6 +155,8 @@ public class File2DBService  extends BaseTestAbstact {
 		List<String> list = Files.readAllLines(path);
 		Pattern pattern = Pattern.compile("\\^\\|");
 		Pattern pattern2 = Pattern.compile("[0-9]{4}");
+		Pattern p = Pattern.compile("[0-9]*平米");
+		Pattern pst = Pattern.compile("[0-9]室[0-9]厅");
 		for (String str : list) {
 			try {
 				HouseBean bean = new HouseBean();
@@ -165,12 +167,21 @@ public class File2DBService  extends BaseTestAbstact {
 				bean.setSeq(seq);
 				String[] fangzi = StringUtils.split(arr[1], "|");
 				bean.setLoupan(fangzi[0].trim()); //楼盘名字
-				bean.setJushi(fangzi[1].trim()); //几室几厅
-				Double mianji = Double.parseDouble(StringUtils.substringBefore(fangzi[2].trim(), "平米")
-						.trim()); //面积
-				bean.setArea(mianji);
+
+				Matcher mst = pst.matcher(arr[1]);
+				if(mst.find()) {
+					bean.setJushi(fangzi[1].trim()); //几室几厅
+				}
+				Matcher m = p.matcher(arr[1]);
+				if(m.find()){
+					String pingmi = m.group();
+					Double mianji = Double.parseDouble(StringUtils.substringBefore(pingmi,"平米")); //面积
+					bean.setArea(mianji);
+				}
 				bean.setDirection(fangzi[3].trim()); //朝向
-				bean.setDecorate(fangzi[4].trim()); //装修
+				if(fangzi.length>=5) {
+					bean.setDecorate(fangzi[4].trim()); //装修
+				}
 				if(fangzi.length >= 6) {
 					bean.setIsDianti(fangzi[5].trim().equals("有电梯"));
 				}
@@ -235,6 +246,21 @@ public class File2DBService  extends BaseTestAbstact {
 	public static void main(String[] args) {
 		String runDate = DateUtils.getCurrentDateStr();
 		System.out.println(runDate);
-		
+		String[] arr = StringUtils.split("通和戈雅公寓 | 联排别墅 | 2室2厅 | 97平米 | 南 北 | 简装","|");
+		System.out.println(arr[4]);
+		String a = "通和戈雅公寓 | 联排别墅 | 2室2厅 | 97平米 | 南 北";
+		String er = "[0-9]*平米";
+		Pattern p = Pattern.compile(er);
+		Matcher m = p.matcher(a);
+		if(m.find()){
+			System.out.println(m.group());
+		}
+
+		er = "[0-9]室[0-9]厅";
+		p = Pattern.compile(er);
+		m = p.matcher(a);
+		if(m.find()){
+			System.out.println(m.group());
+		}
 	}
 }
