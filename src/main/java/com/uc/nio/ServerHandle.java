@@ -30,12 +30,12 @@ public class ServerHandle implements Runnable{
             selector = Selector.open();  
             //打开监听通道  
             serverChannel = ServerSocketChannel.open();  
-            //如果为 true，则此通道将被置于阻塞模式；如果为 false，则此通道将被置于非阻塞模式  
-            serverChannel.configureBlocking(false);//开启非阻塞模式  
+            //如果为 true，则此通道将被置于阻塞模式；如果为 false，则此通道将被置于非阻塞模式
+            serverChannel.configureBlocking(false);//开启非阻塞模式
             //绑定端口 backlog设为1024  
             serverChannel.socket().bind(new InetSocketAddress(port),1024);  
-            //监听客户端连接请求  
-            serverChannel.register(selector, SelectionKey.OP_ACCEPT);  
+            //监听客户端连接请求
+            serverChannel.register(selector, SelectionKey.OP_ACCEPT);
             //标记服务器已开启  
             started = true;  
             System.out.println("服务器已启动，端口号：" + port);  
@@ -51,29 +51,29 @@ public class ServerHandle implements Runnable{
     public void run() {  
         //循环遍历selector  
         while(started){  
-            try{  
-                //无论是否有读写事件发生，selector每隔1s被唤醒一次  
-                selector.select(1000);  
-                //阻塞,只有当至少一个注册的事件发生的时候才会继续.  
-//              selector.select();  
-                Set<SelectionKey> keys = selector.selectedKeys();  
-                Iterator<SelectionKey> it = keys.iterator();  
-                SelectionKey key = null;  
-                while(it.hasNext()){  
-                    key = it.next();  
-                    it.remove();  
-                    try{  
-                        handleInput(key);  
-                    }catch(Exception e){  
-                        if(key != null){  
-                            key.cancel();  
-                            if(key.channel() != null){  
-                                key.channel().close();  
-                            }  
-                        }  
-                    }  
-                }  
-            }catch(Throwable t){  
+            try{
+                //无论是否有读写事件发生，selector每隔1s被唤醒一次
+                selector.select(1000);
+                //阻塞,只有当至少一个注册的事件发生的时候才会继续.
+//              selector.select();
+                Set<SelectionKey> keys = selector.selectedKeys();
+                Iterator<SelectionKey> it = keys.iterator();
+                SelectionKey key = null;
+                while(it.hasNext()){
+                    key = it.next();
+                    it.remove();
+                    try{
+                        handleInput(key);
+                    }catch(Exception e){
+                        if(key != null){
+                            key.cancel();
+                            if(key.channel() != null){
+                                key.channel().close();
+                            }
+                        }
+                    }
+                }
+            }catch(Throwable t){
                 t.printStackTrace();  
             }  
         }  
