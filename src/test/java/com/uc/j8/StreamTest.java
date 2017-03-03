@@ -2,6 +2,7 @@ package com.uc.j8;
 
 import com.google.common.primitives.Ints;
 import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+
 import org.junit.Test;
 
 import java.util.*;
@@ -41,7 +42,7 @@ public class StreamTest {
         System.out.println(ll);
 
         Stream<List<Integer>> stream1 = Stream.of(Arrays.asList(1,2,4),Arrays.asList(3,2,1),Arrays.asList(4,5,0));
-        List<Integer> d = stream1.flatMap((t)->t.stream().map(h->h*h)).collect(Collectors.toList());
+        List<Object> d = stream1.flatMap((t)->t.stream().map(h->h*h)).collect(Collectors.toList());
         System.out.println(d);
         List<Integer> ss = li.stream().peek(t -> System.out.print(t+",")).collect(Collectors.toList());
         System.out.println(ss);
