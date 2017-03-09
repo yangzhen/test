@@ -155,12 +155,110 @@ public class File2DBService  extends BaseTestAbstact {
 		List<String> list = Files.readAllLines(path);
 		Pattern pattern = Pattern.compile("\\^\\|");
 		Pattern pattern2 = Pattern.compile("[0-9]{4}");
-		Pattern p = Pattern.compile("[0-9]*平米");
+		Pattern p = Pattern.compile("[0-9.]*平米");
 		Pattern pst = Pattern.compile("[0-9]室[0-9]厅");
 		for (String str : list) {
 			try {
 				HouseBean bean = new HouseBean();
 				bean.setSite("lianjia");
+				//String arr[] = str.split("$");
+				String arr[] = pattern.split(str);
+				int seq = Integer.parseInt(arr[0]); //序号
+				bean.setSeq(seq);
+				String[] fangzi = StringUtils.split(arr[1], "|");
+				bean.setLoupan(fangzi[0].trim()); //楼盘名字
+
+				Matcher mst = pst.matcher(arr[1]);
+				if(mst.find()) {
+					bean.setJushi(fangzi[1].trim()); //几室几厅
+				}
+				Matcher m = p.matcher(arr[1]);
+				if(m.find()){
+					String pingmi = m.group();
+					Double mianji = Double.parseDouble(StringUtils.substringBefore(pingmi,"平米")); //面积
+					bean.setArea(mianji);
+				}
+				bean.setDirection(fangzi[3].trim()); //朝向
+				if(fangzi.length>=5) {
+					bean.setDecorate(fangzi[4].trim()); //装修
+				}
+				if(fangzi.length >= 6) {
+					bean.setIsDianti(fangzi[5].trim().equals("有电梯"));
+				}
+				bean.setBuildingDesc(arr[2]); //建筑描述
+				Integer buildYear = null;
+				Matcher matcher = pattern2.matcher(arr[2].trim());
+				if(matcher.find()) {
+					buildYear = Integer.parseInt(matcher.group());
+				}
+				bean.setYear(buildYear);
+				//0,天苑花园 | 3室2厅 | 124.5平米 | 南 | 其他 | 有电梯,高楼层(共25层) 1998年建塔楼 - 翠苑,250万,单价20081元/平米,0人关注 / 共0次带看 / 刚刚发布,九莲小学,http://hz.lianjia.com/ershoufang/103100594886.html,天苑花园 3室2厅 250万,翠苑,2016-09-26
+				Double price = Double.parseDouble(arr[3].split("万")[0]);
+				bean.setPrice(price.intValue());
+				Integer unitPrice = Integer.parseInt(arr[4].split("价")[1].split("元")[0]);
+
+				String[] parr = arr[5].split("/");
+				Integer subCount = Integer.parseInt(parr[0].trim().split("人")[0]);
+				bean.setSubCount(subCount);
+				Integer visitCount = Integer.parseInt(parr[1].trim().split("共")[1].split("次")[0]);
+				bean.setVisitCount(visitCount);
+				String dateDesc = parr[2].trim();
+				String dt = null;
+				Date date = DateUtils.getDateStr(arr[arr.length-1]);
+				if (dateDesc.equals("刚刚发布")) {
+					dt = DateUtils.getDateStr(date);
+				} else if (dateDesc.contains("天")) {
+					Integer cou = Integer.parseInt(dateDesc.split("天")[0]);
+					Date date2 = DateUtils.getDateBeforeOrAfter(date, -cou);
+					dt = DateUtils.getDateStr(date2);
+				} else if (dateDesc.contains("月")) {
+					Integer cou = Integer.parseInt(dateDesc.split("个月")[0]);
+					Date date2 = DateUtils.getMonthBeforeOrAfter(date, -cou);
+					dt = DateUtils.getDateStr(date2);
+					dt = StringUtils.substringBeforeLast(dt, "-") + "-00";
+				}
+				bean.setPubDate(dt);
+				bean.setPubDateDesc(dateDesc);
+				bean.setUnitPrice(unitPrice);
+				bean.setTag(arr[6]);
+				bean.setHref(arr[7]);
+				bean.setTitle(arr[8]);
+				bean.setXiaoqu(arr[arr.length-2]);
+				bean.setCrawlingDate(arr[arr.length-1]);
+				HouseBean hdb = dao.find(bean.getHref());
+				if(hdb != null && hdb.getPrice().equals(bean.getPrice())) {
+					logger.info(bean.toString()+",has insert,id:"+hdb.getId());
+					continue;
+				} else if (hdb != null) {
+					int up = bean.getPrice().intValue()>hdb.getPrice().intValue()?1:-1;
+					bean.setUp(up);
+				}
+				logger.info(bean.toString()+",new insert");
+				dao.insert(bean);
+			} catch (Exception e) {
+				logger.error("db error,str:" + str, e);
+			}
+		}
+		stopWatch.stop();
+		logger.info("lianjia db insert cost:" + stopWatch.getTotalTimeMillis());
+	}
+
+
+	public void bjljFile2DB(String runDate) throws Exception {
+		//dao.delete(runDate,"lianjia");
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		String name = "/Users/yangzhen/logs/fz/bjlianjia.txt";
+		Path path = Paths.get(name);
+		List<String> list = Files.readAllLines(path);
+		Pattern pattern = Pattern.compile("\\^\\|");
+		Pattern pattern2 = Pattern.compile("[0-9]{4}");
+		Pattern p = Pattern.compile("[0-9.]*平米");
+		Pattern pst = Pattern.compile("[0-9]室[0-9]厅");
+		for (String str : list) {
+			try {
+				HouseBean bean = new HouseBean();
+				bean.setSite("bjlianjia");
 				//String arr[] = str.split("$");
 				String arr[] = pattern.split(str);
 				int seq = Integer.parseInt(arr[0]); //序号
@@ -248,7 +346,7 @@ public class File2DBService  extends BaseTestAbstact {
 		System.out.println(runDate);
 		String[] arr = StringUtils.split("通和戈雅公寓 | 联排别墅 | 2室2厅 | 97平米 | 南 北 | 简装","|");
 		System.out.println(arr[4]);
-		String a = "通和戈雅公寓 | 联排别墅 | 2室2厅 | 97平米 | 南 北";
+		String a = "磨房北里 | 1室1厅 | 43.81平米 | 南 | 精装^|顶层(共6层)1987年建板楼";
 		String er = "[0-9]*平米";
 		Pattern p = Pattern.compile(er);
 		Matcher m = p.matcher(a);

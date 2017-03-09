@@ -49,6 +49,14 @@ public class HouseMainTest extends BaseTestAbstact {
                     hshb.dohh(latch);
                 }
             }.start();
+
+//            new Thread() {
+//                @Override
+//                public  void run() {
+//                    lj.dobjhh(latch);
+//                }
+//            }.start();
+
             latch.await();
             logger.info("all job end,time:" + DateUtils.getCurrentDateTimeStr());
         } catch (InterruptedException e) {

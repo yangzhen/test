@@ -1,7 +1,6 @@
 package com.uc;
 
-import com.uc.renren.dao.HouseDao;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -37,5 +36,9 @@ public class AppTest {
         	sum = sum * 10 + (a.charAt(i) - '0');
         	System.out.println(sum);
         }
+        
+        File file = new File("/Users/yangzhen/logs/test");
+        System.out.println(file.exists());
+        System.out.println(file.delete());	
     }
 }

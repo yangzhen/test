@@ -91,6 +91,22 @@ public class LJTest  extends BaseTestAbstact {
 		watch.stop();
 		logger.info("lianjia end,cost:" + watch.getTotalTimeMillis());
 	}
+
+	public void dobjhh(CountDownLatch latch) {
+		StopWatch watch = new StopWatch();
+		watch.start();
+		try {
+			logger.info("bjlianjia start");
+			testBJPC();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		latch.countDown();
+		watch.stop();
+		logger.info("bjlianjia end,cost:" + watch.getTotalTimeMillis());
+	}
+
+
 	@Test
 	public void testPC() throws InterruptedException {
 		UcRESTTemplate rest = UcRESTTemplate.getNewInstance();
@@ -190,6 +206,112 @@ public class LJTest  extends BaseTestAbstact {
 		String runDate = DateUtils.getCurrentDateStr();
 		try {
 			service.ljFile2DB(runDate);
+		} catch (Exception e) {
+			logger.error("testPC service error",e);
+		}
+	}
+
+
+
+	@Test
+	public void testBJPC() throws InterruptedException {
+		UcRESTTemplate rest = UcRESTTemplate.getNewInstance();
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.add("Host", "bj.lianjia.com");
+		headers.add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+		headers.add("Accept-language", "en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4");
+		headers.add("User-Agent",
+				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:48.0) Gecko/20100101 Firefox/48.0");
+		headers.add("Referer", "http://bj.lianjia.com/ershoufang/");
+		headers.add("Connection", "keep-alive");
+
+		String query = "co32ng1hu1nb1ep10000"; //100-150万,150-200万,200-300万 按时间排序
+		//String query = "p4p5"; //200-300 300-500
+		//String query = "l3l2a2a3p2p3/"; //100-200万,50-90平,2-3室
+
+		String path = "/Users/yangzhen/logs/fz/bjlianjia.txt";
+		Path file = Paths.get(path);
+		Charset charset = Charset.forName("utf-8");
+		AtomicInteger atm = new AtomicInteger();
+		HttpEntity<Void> httpEntity = new HttpEntity<Void>(headers);
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, charset);) {
+			long start = System.currentTimeMillis();
+			int pageSize = 100;
+			for (int i = 1; i <= pageSize; i++) {
+				String url = "http://bj.lianjia.com/ershoufang/pg" + i + query; //100-200万
+				try {
+					ResponseEntity<String> entity = rest.getEntity(url, httpEntity);
+					String text = entity.getBody();
+					//System.out.println("lianjia url:" + url+",content:" + text);
+					Document document = Jsoup.parse(text);
+//					if(i==1) {
+//						String number = document.select("h2.total.fl").first().getElementsByTag("span").text();
+//						dao.deleteStat(DateUtils.getCurrentDateStr(),"lianjia");
+//						dao.insertStat(DateUtils.getCurrentDateStr(),"lianjia",Integer.parseInt(number));
+//						//pageSize = Integer.parseInt(number)*8/300;
+//						//pageSize = Integer.parseInt(number)/30;
+//						System.out.println("lianjia pageSize:" + pageSize+",totalNumber:" + number);
+//					}
+					Elements elements = document.getElementsByClass("sellListContent").first()
+							.select("div.info.clear");
+					System.out.println("lianjia,url:" + url+",elements.size():" + elements.size());
+					for (Element element : elements) {
+						System.out.println(element);
+						String houseHref = element.getElementsByClass("title").select("a[href]").first()
+								.attr("href"); //房子详情连接
+						String houseTitle = element.getElementsByClass("title").select("a[href]").first()
+								.text(); //房子标题
+
+						String xiaoqunfo = element.getElementsByClass("houseInfo").select("a[href]")
+								.first().attr("href"); //小区详情连接
+						String houseInfo = element.getElementsByClass("houseInfo").text(); //房子详情
+
+						System.out.println("houseFlood,communityName,communityInfo");
+						String houseFlood = element.getElementsByClass("positionInfo").text(); //所属楼层
+						String communityInfo = element.getElementsByClass("positionInfo").select("a[href]")
+								.first().attr("href"); //小区房子列表
+						String communityName = element.getElementsByClass("positionInfo").select("a[href]")
+								.first().text(); //小区名字
+
+						String followInfo = element.getElementsByClass("followInfo").text(); //房子查看次数
+						System.out.println("houseFlood,followInfo,communityName,communityInfo");
+						System.out.println(houseFlood + "," + followInfo + "," + communityName + ","
+								+ communityInfo);
+
+						Elements elementsTag = element.getElementsByClass("tag"); //房子推荐亮点
+						String tag = null;
+						for (Element element2 : elementsTag) {
+							tag = element2.text() + " ";
+						}
+						tag = tag.substring(0, tag.length() - 1);
+						String totalPrice = element.getElementsByClass("totalPrice").first().text(); //总价
+						String unitPrice = element.getElementsByClass("unitPrice").first().text()
+								.split(" ")[0]; //单价
+						String split = "^|";
+						String hh = (atm.incrementAndGet()) + split + houseInfo + split + houseFlood + split + totalPrice + split + unitPrice + split + followInfo + split
+								+ tag + split + houseHref + split + houseTitle + split + communityName+split + DateUtils.getCurrentDateStr();
+						System.out.println(hh+",bjlianjiapaqu");
+						bufferedWriter.write(hh + "\n");
+					}
+					int thleep = ThreadLocalRandom.current().nextInt(200, 1500);
+					Thread.sleep(thleep);
+					if (elements.size() < 30) {
+						break;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			System.out.println("bjlianjia网页共计耗时：" + (System.currentTimeMillis() - start)+","+path);
+		} catch (IOException e) {
+			logger.error("main service error", e);
+		} catch (Exception e) {
+			logger.error("testPC service error",e);
+		}
+		String runDate = DateUtils.getCurrentDateStr();
+		try {
+			service.bjljFile2DB(runDate);
 		} catch (Exception e) {
 			logger.error("testPC service error",e);
 		}
