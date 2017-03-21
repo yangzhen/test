@@ -294,7 +294,7 @@ public class LJTest  extends BaseTestAbstact {
 						System.out.println(hh+",bjlianjiapaqu");
 						bufferedWriter.write(hh + "\n");
 					}
-					int thleep = ThreadLocalRandom.current().nextInt(200, 1500);
+					int thleep = ThreadLocalRandom.current().nextInt(300, 1500);
 					Thread.sleep(thleep);
 					if (elements.size() < 30) {
 						break;
