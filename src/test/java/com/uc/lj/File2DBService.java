@@ -132,13 +132,16 @@ public class File2DBService  extends BaseTestAbstact {
 			bean.setXiaoqu(arr[13]);
 			bean.setCrawlingDate(arr[14]);
 			HouseBean hdb = dao.find(bean.getHref());
-			if(hdb != null && hdb.getPrice().equals(bean.getPrice())) {
+			if(hdb != null && hdb.getPrice().equals(bean.getPrice()) && hdb.getVisitCount().equals(bean.getVisitCount())) {
 				logger.info(bean.toString()+",has insert,id:"+hdb.getId());
 				continue;
-			} else if (hdb != null && hdb.getPrice() != bean.getPrice()) {
+			} else if (hdb != null && hdb.getPrice().intValue() != bean.getPrice().intValue()) {
 				int up = bean.getPrice().intValue()>hdb.getPrice().intValue()?1:-1;
 				bean.setUp(up);
+			} else if (hdb != null && hdb.getVisitCount() != bean.getVisitCount().intValue()) {
+				bean.setUp(2); //带看量变化
 			}
+
 			logger.info(bean.toString()+",new insert");
 			dao.insert(bean);
 		}
@@ -226,13 +229,16 @@ public class File2DBService  extends BaseTestAbstact {
 				bean.setXiaoqu(arr[arr.length-2]);
 				bean.setCrawlingDate(arr[arr.length-1]);
 				HouseBean hdb = dao.find(bean.getHref());
-				if(hdb != null && hdb.getPrice().equals(bean.getPrice())) {
+				if(hdb != null && hdb.getPrice().equals(bean.getPrice()) && hdb.getVisitCount().equals(bean.getVisitCount())) {
 					logger.info(bean.toString()+",has insert,id:"+hdb.getId());
 					continue;
-				} else if (hdb != null) {
+				} else if (hdb != null && hdb.getPrice().intValue() != bean.getPrice().intValue()) {
 					int up = bean.getPrice().intValue()>hdb.getPrice().intValue()?1:-1;
 					bean.setUp(up);
+				} else if (hdb != null && hdb.getVisitCount() != bean.getVisitCount().intValue()) {
+					bean.setUp(2); //带看量变化
 				}
+
 				logger.info(bean.toString()+",new insert");
 				dao.insert(bean);
 			} catch (Exception e) {
@@ -324,13 +330,16 @@ public class File2DBService  extends BaseTestAbstact {
 				bean.setXiaoqu(arr[arr.length-2]);
 				bean.setCrawlingDate(arr[arr.length-1]);
 				HouseBean hdb = dao.find(bean.getHref());
-				if(hdb != null && hdb.getPrice().equals(bean.getPrice())) {
+				if(hdb != null && hdb.getPrice().equals(bean.getPrice()) && hdb.getVisitCount().equals(bean.getVisitCount())) {
 					logger.info(bean.toString()+",has insert,id:"+hdb.getId());
 					continue;
-				} else if (hdb != null) {
+				} else if (hdb != null && hdb.getPrice().intValue() != bean.getPrice().intValue()) {
 					int up = bean.getPrice().intValue()>hdb.getPrice().intValue()?1:-1;
 					bean.setUp(up);
+				} else if (hdb != null && hdb.getVisitCount() != bean.getVisitCount().intValue()) {
+					bean.setUp(2); //带看量变化
 				}
+
 				logger.info(bean.toString()+",new insert");
 				dao.insert(bean);
 			} catch (Exception e) {
@@ -339,6 +348,54 @@ public class File2DBService  extends BaseTestAbstact {
 		}
 		stopWatch.stop();
 		logger.info("lianjia db insert cost:" + stopWatch.getTotalTimeMillis());
+	}
+
+
+
+
+	public void bjwjFile2DB(String runDate) throws Exception {
+		//dao.delete(runDate, "5i5j");
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		String name = "/Users/yangzhen/logs/fz/b100e300u1o6n_wj_"+runDate+".txt";
+		name = "/Users/yangzhen/logs/fz/o6n_bjwj.txt";
+		Path path = Paths.get(name);
+		List<String> list = Files.readAllLines(path);
+		Pattern pattern = Pattern.compile("\\^\\|");
+		for(String str : list) {
+			HouseBean bean = new HouseBean();
+			String arr[] = pattern.split(str);
+			bean.setSite("bj5i5j");
+			bean.setSeq(Integer.parseInt(arr[0]));
+			bean.setLoupan(arr[1]);
+			bean.setJushi(arr[2]);
+			bean.setArea(Double.parseDouble(arr[3]));
+			bean.setDirection(arr[4]);
+			bean.setBuildingDesc(arr[5]);
+			bean.setVisitCount(Integer.parseInt(arr[6]));
+			bean.setPrice(Integer.parseInt(arr[7]));
+			bean.setUnitPrice(Integer.parseInt(arr[8]));
+			bean.setShiqu(arr[9]);
+			bean.setTitle(arr[10]);
+			bean.setHref(arr[11]);
+			bean.setTag(arr[12]);
+			bean.setXiaoqu(arr[13]);
+			bean.setCrawlingDate(arr[14]);
+			HouseBean hdb = dao.find(bean.getHref());
+			if(hdb != null && hdb.getPrice().equals(bean.getPrice()) && hdb.getVisitCount().equals(bean.getVisitCount())) {
+				logger.info(bean.toString()+",has insert,id:"+hdb.getId());
+				continue;
+			} else if (hdb != null && hdb.getPrice().intValue() != bean.getPrice().intValue()) {
+				int up = bean.getPrice().intValue()>hdb.getPrice().intValue()?1:-1;
+				bean.setUp(up);
+			} else if (hdb != null && hdb.getVisitCount() != bean.getVisitCount().intValue()) {
+				bean.setUp(2); //带看量变化
+			}
+			logger.info(bean.toString()+",new insert");
+			dao.insert(bean);
+		}
+		stopWatch.stop();
+		logger.info("bj5i5j db insert cost:" + stopWatch.getTotalTimeMillis());
 	}
 	
 	public static void main(String[] args) {

@@ -64,4 +64,30 @@ public class HouseMainTest extends BaseTestAbstact {
         }
     }
 
+
+    public void testBjAll() {
+        CountDownLatch latch = new CountDownLatch(2);
+        try {
+            new Thread(){
+                @Override
+                public void run() {
+                    wj.doBjhh(latch);
+                }
+            }.start();
+
+            new Thread() {
+                @Override
+                public  void run() {
+                    lj.dobjhh(latch);
+                }
+            }.start();
+
+            latch.await();
+            logger.info("all bjjob end,time:" + DateUtils.getCurrentDateTimeStr());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
