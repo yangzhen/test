@@ -254,6 +254,7 @@ public class File2DBService  extends BaseTestAbstact {
 		//dao.delete(runDate,"lianjia");
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
+		int newInsert = 0;
 		String name = "/Users/yangzhen/logs/fz/bjlianjia.txt";
 		Path path = Paths.get(name);
 		List<String> list = Files.readAllLines(path);
@@ -339,15 +340,15 @@ public class File2DBService  extends BaseTestAbstact {
 				} else if (hdb != null && hdb.getVisitCount() != bean.getVisitCount().intValue()) {
 					bean.setUp(2); //带看量变化
 				}
-
-				logger.info(bean.toString()+",new insert");
+				newInsert++;
+				logger.info(bean.toString()+",new insert," + newInsert);
 				dao.insert(bean);
 			} catch (Exception e) {
 				logger.error("db error,str:" + str, e);
 			}
 		}
 		stopWatch.stop();
-		logger.info("lianjia db insert cost:" + stopWatch.getTotalTimeMillis());
+		logger.info("lianjia db insert cost:" + stopWatch.getTotalTimeMillis()+",newInsert:" + newInsert);
 	}
 
 
@@ -362,6 +363,7 @@ public class File2DBService  extends BaseTestAbstact {
 		Path path = Paths.get(name);
 		List<String> list = Files.readAllLines(path);
 		Pattern pattern = Pattern.compile("\\^\\|");
+		int newInsert = 0;
 		for(String str : list) {
 			HouseBean bean = new HouseBean();
 			String arr[] = pattern.split(str);
@@ -391,11 +393,12 @@ public class File2DBService  extends BaseTestAbstact {
 			} else if (hdb != null && hdb.getVisitCount() != bean.getVisitCount().intValue()) {
 				bean.setUp(2); //带看量变化
 			}
-			logger.info(bean.toString()+",new insert");
+			newInsert++;
+			logger.info(bean.toString()+",new insert," + newInsert);
 			dao.insert(bean);
 		}
 		stopWatch.stop();
-		logger.info("bj5i5j db insert cost:" + stopWatch.getTotalTimeMillis());
+		logger.info("bj5i5j db insert cost:" + stopWatch.getTotalTimeMillis()+",newInsert:" + newInsert);
 	}
 	
 	public static void main(String[] args) {
