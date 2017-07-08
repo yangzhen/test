@@ -2,7 +2,7 @@ package com.uc.j8;
 
 public class Printer {
 
-    public final static Node NODE = new Node();
+    public final static AtoNode NODE = new AtoNode();
     final String A = "A";
     final String B = "B";
 
@@ -52,7 +52,7 @@ public class Printer {
 
 
 
-class Node {
+class AtoNode {
     volatile int i;
     volatile String holder;
 }

@@ -1,18 +1,15 @@
 package com.uc.j8;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
-import com.alibaba.druid.sql.visitor.functions.Char;
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class WhyJ8 {
 
@@ -117,5 +114,13 @@ public class WhyJ8 {
         System.out.println(aa);
         Integer a  = idList.stream().reduce(Integer::sum).get();
         System.out.println(a);
+    }
+
+    @Test
+    public void testS() {
+        String[] array = {"a", "b", "c"};
+        for(Integer i : Arrays.asList(1, 2, 3)){
+            Stream.of(array).map(item -> Strings.padEnd(item, i, '@')).forEach(System.out::println);
+        }
     }
 }
