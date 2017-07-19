@@ -14,14 +14,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 		byte[] req = new byte[in.readableBytes()];
 		in.readBytes(req);
 		String body = new String(req,"utf-8");
-		System.out.println("收到客户端消息:"+body);
+		System.out.println("收到客户端消息:"+body+",name:" + Thread.currentThread().getName());
 		String calrResult = null;
 		try{
 			calrResult = Calculator.cal(body).toString();
 		}catch(Exception e){
 			calrResult = "错误的表达式：" + e.getMessage();
 		}
-		ctx.write(Unpooled.copiedBuffer(calrResult.getBytes()));
+		//ctx.write(Unpooled.copiedBuffer(calrResult.getBytes()));
+		ConnectionManager.getInstance().put(new ConnBean(ctx,calrResult));
 	}
 	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
