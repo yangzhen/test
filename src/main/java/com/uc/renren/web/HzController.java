@@ -31,7 +31,7 @@ public class HzController {
         json.put("userCreditPwd", "kounan2812");
 
         result.setData(json);
-        
+
         return result;
     }
 
