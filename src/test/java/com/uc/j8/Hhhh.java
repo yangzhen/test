@@ -89,6 +89,14 @@ public class Hhhh {
 	}
 
 	public static void main(String[] args) {
+
+			int array[ ][ ]=new int[3][ ];
+			array[0]=new int[4];
+			array[1]=new int[2];
+			array[2]=new int[3];
+			System.out.println(array.length+"\t"+array[1].length);
+
+
 		Integer a = 345;
 		Integer b = 777;
 		Integer c = 999;
