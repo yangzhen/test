@@ -27,8 +27,6 @@
 		</property>
 	</bean>
 
-	<description>Spring公共配置</description>
-
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
 	<context:component-scan base-package="com.uc.renren">
 		<context:exclude-filter type="annotation"
@@ -54,7 +52,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="com.ucredit.renren.server.bean.entry" />
+		<property name="typeAliasesPackage" value="com.uc.renren.bean" />
 		<!-- 显式指定Mapper文件位置 -->
 		<property name="mapperLocations" value="classpath:mybatis/*Mapper.xml" />
 		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
