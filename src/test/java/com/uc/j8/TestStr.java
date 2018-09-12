@@ -27,5 +27,17 @@ public class TestStr {
         System.out.println(get("1"));
         System.out.println(get("1a"));
 
+        String a = "helloworld";
+        String b = "hello" + "world";
+        String c = "hello";
+        String d = c + "world";
+        String e = new String("helloworld");
+        String f = c.intern();
+        String g = a.intern();
+        System.out.println(a == b);
+        System.out.println(a == d);
+        System.out.println(a == f);
+        System.out.println(f == g);
+
     }
 }
