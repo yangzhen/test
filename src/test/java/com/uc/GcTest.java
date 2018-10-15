@@ -7,9 +7,9 @@ public class GcTest {
     public static void main(String[] args)
                 throws ClassNotFoundException, InterruptedException {
         Class.forName("com.mysql.jdbc.Driver");
-        final String url = "jdbc:mysql://10.255.33.87:3308";
+        final String url = "jdbc:mysql://127.0.0.1:3308";
         final String user = "dev";
-        final String pwd = "devtest123";
+        final String pwd = "hh123";
         for (int i = 0; i < 5; i++) {
             new Thread() {
                 public void run() {

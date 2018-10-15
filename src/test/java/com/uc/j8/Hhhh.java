@@ -85,6 +85,7 @@ public class Hhhh {
 			return a;
 		} finally {
 			a += "d";
+			return a;
 		}
 	}
 

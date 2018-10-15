@@ -16,7 +16,7 @@
 		<servlet.version>3.1.0</servlet.version>
 		<junit.version>4.12</junit.version>
 		<jdk.version>1.8</jdk.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourservletceEncoding>UTF-8</project.build.sourservletceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jetty.version>9.3.6.v20151106</jetty.version>
 	</properties>

@@ -1,5 +1,7 @@
 package com.uc.j8;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -17,6 +19,11 @@ public class TreeEachTest {
         Node root_r= new Node(20);
         root.leftNode=root_l;
         root.rigthNode=root_r;
+
+        Node rl_left = new Node(8);
+        Node rl_rigth = new Node(13);
+        root_l.leftNode = rl_left;
+        root_l.rigthNode = rl_rigth;
 
         Node rr_left = new Node(15);
         Node rr_rigth = new Node(7);
@@ -51,7 +58,7 @@ public class TreeEachTest {
                 queue.offer(rigth);
             }
             if(current ==0){
-                System.out.println();
+                System.out.println("----- 一层遍历完毕 ");
                 current=next;
                 next=0;
             }
