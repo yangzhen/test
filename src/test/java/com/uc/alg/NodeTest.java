@@ -1,5 +1,6 @@
 package com.uc.alg;
 
+import com.uc.alg.bean.ListNode;
 import org.junit.Test;
 
 //http://blog.csdn.net/ljiabin/article/details/41984511
@@ -94,14 +95,13 @@ public class NodeTest {
     public ListNode resverNode(ListNode head) {
         ListNode pre = null;
         ListNode next = null;
-        while(head.next != null) {
+        while(head != null) {
             next = head.next;
-            head.next = pre;
-            pre = head;
-            head = next;
+            head.next=pre;
+            pre=head;
+            head=next;
         }
-        head.next = pre;
-        return head;
+        return pre;
     }
 
 
@@ -114,13 +114,3 @@ public class NodeTest {
     }
 }
 
-class ListNode {
-
-    int val;
-    ListNode next;
-
-    ListNode(int x) {
-        val = x;
-        next = null;
-    }
-}

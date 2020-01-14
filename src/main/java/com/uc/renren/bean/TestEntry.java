@@ -1,5 +1,7 @@
 package com.uc.renren.bean;
 
+import java.io.Serializable;
+
 /**
  * 
  * TestEntry 
@@ -7,7 +9,8 @@ package com.uc.renren.bean;
  * @date 2016年7月1日 下午3:41:15
  *
  */
-public class TestEntry {
+public class TestEntry implements Serializable {
+
 
 	private int id;
 
@@ -15,9 +18,11 @@ public class TestEntry {
 
 	private String name;
 
+
 	private String createTime;
 
 	private String updateTime;
+
 
 	public String getText() {
 		return text;

@@ -1,6 +1,5 @@
 package com.uc.aop;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import com.uc.nio.my.HelloService;
 import com.uc.nio.my.HelloServiceImpl;
 

@@ -22,6 +22,13 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+
 		<!-- spring framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
