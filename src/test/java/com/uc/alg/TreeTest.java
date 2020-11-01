@@ -37,6 +37,26 @@ public class TreeTest {
 
   Node root = new Node(1, left12, right13);
 
+
+  @Test
+  public void testLeafSum() {
+    int sum = leaf(root);
+    System.out.println(sum);
+  }
+
+  public int leaf(Node node) {
+    if(node == null) {
+      return 0;
+    }
+
+    if(node != null && node.left==null && node.right==null) {
+      return node.value;
+    }
+
+    return  leaf(node.left) + leaf(node.right);
+  }
+
+
   @Test
   public void testLeftSum() {
     int sum = leftSum(root);
@@ -167,6 +187,45 @@ public class TreeTest {
     }
     return res;
   }
+
+
+  @Test
+  public void test122() {
+    List<List<Integer>> lists = new ArrayList<>();
+
+    LinkedList<Node> queue = new LinkedList();
+    queue.add(root);
+    boolean flag = true;
+
+    while(!queue.isEmpty()) {
+
+      List<Integer> list = new ArrayList<>();
+      int pos = queue.size();
+      while (pos-->0) {
+        Node node = queue.poll();
+        list.add(node.value);
+        if(node.left != null) {
+          queue.add(node.left);
+        }
+        if(node.right != null) {
+          queue.add(node.right);
+        }
+      }
+
+      if(flag) {
+        lists.add(list);
+      }else {
+        Collections.reverse(list);
+        lists.add(list);
+      }
+      flag=!flag;
+
+    }
+
+    System.out.println(lists);
+  }
+
+
 }
 
 
