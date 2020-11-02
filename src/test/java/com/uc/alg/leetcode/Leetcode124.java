@@ -1,13 +1,14 @@
-package com.uc.alg;
+package com.uc.alg.leetcode;
 
 
+import com.uc.alg.TreeNode;
 import org.junit.Test;
 
 public class Leetcode124 {
 
     int max = Integer.MIN_VALUE;
 
-    public int maxPathSum(TreeNode root) {
+    public int maxPathSum(com.uc.alg.TreeNode root) {
         if(root == null) {
             return 0;
         }
@@ -15,7 +16,7 @@ public class Leetcode124 {
         return max;
     }
 
-    public int count(TreeNode root) {
+    public int count(com.uc.alg.TreeNode root) {
         if(root == null) {
             return 0;
         }
@@ -28,7 +29,7 @@ public class Leetcode124 {
 
     @Test
     public void test() {
-        TreeNode node = TreeNode.getNode();
+        com.uc.alg.TreeNode node = TreeNode.getNode();
         int ma = maxPathSum(node);
         System.out.println(ma);
     }

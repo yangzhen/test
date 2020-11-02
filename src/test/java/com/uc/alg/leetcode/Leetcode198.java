@@ -1,4 +1,4 @@
-package com.uc.alg;
+package com.uc.alg.leetcode;
 
 import org.junit.Assert;
 import org.junit.Test;
