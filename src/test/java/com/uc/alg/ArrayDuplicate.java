@@ -80,9 +80,13 @@ public class ArrayDuplicate {
 
     public static void main(String[] args) {
         int[] arr = {1,3,2,6,5,4,4,7,8};
+        System.out.println("----");
         System.out.println(findDuplicateError(arr));
+        System.out.println("----");
         System.out.println(findDuplicate(arr));
+        System.out.println("----");
         System.out.println(findDuplicate1(arr));
+        System.out.println("----");
         System.out.println(findDuplicate2(arr));
     }
 }

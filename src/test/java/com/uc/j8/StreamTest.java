@@ -1,7 +1,6 @@
 package com.uc.j8;
 
 import com.google.common.primitives.Ints;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import org.junit.Test;
 
