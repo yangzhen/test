@@ -1,5 +1,8 @@
 package com.uc.j8;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author yangxinyan
  * @date 2018/8/31
@@ -31,6 +34,17 @@ public class StrTest {
     }
 
     public static void main(String[] args) {
+
+        List<String> list = Arrays.asList("a","b'","c");
+        for(int i=0;i<list.size();i++) {
+            String str = list.get(i);
+            if(str.equals("a")) {
+                list.remove(str);
+            }
+        }
+        System.out.println(list);
+
+
         String renrena = "helloworld";
         String renrenb = "hello" + "world";
 
@@ -47,5 +61,6 @@ public class StrTest {
         int a=2,b=3,c=4;
         int yu = ++a+b+++c++;
         System.out.println(yu);
+
     }
 }

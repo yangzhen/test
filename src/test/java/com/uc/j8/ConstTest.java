@@ -1,5 +1,8 @@
 package com.uc.j8;
 
+/**
+ * 石玉琼 静态代码块，类初始化
+ */
 public class ConstTest {
 
     private ConstTest () {
@@ -8,11 +11,10 @@ public class ConstTest {
 
     public static void main(String[] args){
 
-        Sub base = new Sub();
+        Base base = new Sub();
 
     }
 }
-
 class Base {
 
     String namea = "base";
