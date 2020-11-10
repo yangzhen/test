@@ -12,15 +12,15 @@ import org.junit.Test;
  */
 public class ArrayRightMax {
 
-  public int[] findMaxRight(int[] array) {
-    int[] res = new int[array.length];
-    if(array == null || array.length==0) {
+  public int[] findMaxRight(int[] arr) {
+    int[] res = new int[arr.length];
+    if(arr == null || arr.length==0) {
       return res;
     }
     Stack<Integer> stack = new Stack<>();
-    for(int index=0; index<array.length;index++) {
-      while (!stack.isEmpty() && array[index] > array[stack.peek()]) {
-        res[stack.pop()] = array[index];
+    for(int index=0; index<arr.length;index++) {
+      while (!stack.isEmpty() && arr[index] > arr[stack.peek()]) {
+        res[stack.pop()] = arr[index];
       }
       stack.push(index);
     }

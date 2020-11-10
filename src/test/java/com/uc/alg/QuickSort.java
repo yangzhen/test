@@ -25,7 +25,6 @@ public class QuickSort {
                 arr[j]=temp;
             }
         }
-        System.out.print(" ");
         arr[left]=arr[i];
         arr[i]=pivot;
         quickSort(arr,left,i-1);

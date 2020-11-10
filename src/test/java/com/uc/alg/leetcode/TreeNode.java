@@ -1,6 +1,6 @@
 package com.uc.alg.leetcode;
 
-class TreeNode {
+public class TreeNode {
 
   public TreeNode left;
   public TreeNode right;
