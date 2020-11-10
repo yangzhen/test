@@ -19,25 +19,6 @@ import org.junit.Test;
  * /
  * 1 输出: 3
  */
-class TreeNode {
-
-  int val = 0;
-  TreeNode left = null;
-  TreeNode right = null;
-
-  public TreeNode(int val) {
-    this.val = val;
-  }
-
-  @Override
-  public String toString() {
-    return "TreeNode{" +
-        "val=" + val +
-        ", left=" + left +
-        ", right=" + right +
-        '}';
-  }
-}
 
 public class Solution {
 
@@ -153,7 +134,7 @@ public class Solution {
   //【后序】,[1, 2, 4, 3, 6, 5]
   @Test
   public void testPortOrder() {
-    TreeNode root = getTreeNode();
+    TreeNode root = TreeNode.getNode();
     List<Integer> list = new ArrayList<>();
     postOrder(root,list);
     System.out.println("【后序】," + list);
@@ -162,7 +143,7 @@ public class Solution {
   //【前序】,[5, 3, 2, 1, 4, 6]
   @Test
   public void testPreOrder() {
-    TreeNode root = getTreeNode();
+    TreeNode root = TreeNode.getNode();
     List<Integer> list = new ArrayList<>();
     preOrder(root,list);
     System.out.println(list);
@@ -172,7 +153,7 @@ public class Solution {
   //[前序非递归]，[5, 3, 2, 1, 4, 6]
   @Test
   public void testPreOrderTraversal() {
-    TreeNode root = getTreeNode();
+    TreeNode root = TreeNode.getNode();
     List<Integer> list = new ArrayList<>();
     preOrderTraversal(root,list);
     System.out.println("[前序非递归]，" + list);
@@ -180,7 +161,7 @@ public class Solution {
 
   @Test
   public void testInorder() {
-    TreeNode root = getTreeNode();
+    TreeNode root = TreeNode.getNode();
     List<Integer> list = new ArrayList<>();
     inOrder(root,list);
     System.out.println(list);
@@ -188,7 +169,7 @@ public class Solution {
 
   @Test
   public void testInorderTraversal() {
-    TreeNode root = getTreeNode();
+    TreeNode root = TreeNode.getNode();
     List<Integer> list = new ArrayList<>();
     inorderTraversal(root,list);
     System.out.println(list);
@@ -196,27 +177,12 @@ public class Solution {
 
   @Test
   public void test() {
-    TreeNode root = getTreeNode();
+    TreeNode root = TreeNode.getNode();
 
     TreeNode node = kthNode(root,4);
     System.out.println(node.val);
 
   }
 
-  private TreeNode getTreeNode() {
-    TreeNode root = new TreeNode(5);
-    TreeNode root_left = new TreeNode(3);
-    TreeNode root_right = new TreeNode(6);
-    root.left = root_left;
-    root.right = root_right;
 
-    TreeNode root_left_left = new TreeNode(2);
-    TreeNode root_left_right = new TreeNode(4);
-    root_left.left = root_left_left;
-    root_left.right = root_left_right;
-
-    TreeNode root_left_left_left = new TreeNode(1);
-    root_left_left.left = root_left_left_left;
-    return root;
-  }
 }
